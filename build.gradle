@@ -1,0 +1,27 @@
+// Modified version of file from Domic project (see NOTICE).
+
+apply from: 'dependencies.gradle'
+
+buildscript {
+    apply from: 'dependencies.gradle'
+
+    repositories {
+        jcenter()
+        google()
+    }
+
+    dependencies {
+        classpath gradlePlugins.android
+        classpath gradlePlugins.kotlin
+    }
+}
+
+allprojects {
+    repositories {
+        jcenter()
+        google()
+    }
+}
+
+apply from: "$rootDir/gradle/lint.gradle"
+apply from: "$rootDir/gradle/dependency-resolution.gradle"

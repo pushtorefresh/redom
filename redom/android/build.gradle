@@ -1,0 +1,37 @@
+// Modified version of file from Domic project (see NOTICE).
+
+apply plugin: 'com.android.library'
+apply plugin: 'kotlin-android'
+
+android {
+    defaultConfig {
+        minSdkVersion versions.minSdk
+        compileSdkVersion versions.compileSdk
+
+        buildToolsVersion versions.buildTools
+    }
+
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
+    }
+}
+
+dependencies {
+    api project(':redom:api')
+}
+
+dependencies {
+    implementation project(':redom:util')
+    implementation supportLibraries.recyclerView
+    implementation libraries.rxAndroid
+    implementation libraries.rxBinding
+    implementation libraries.rxReplayingShareKotlin
+}
+
+dependencies {
+    testImplementation testLibraries.junit
+    testImplementation testLibraries.assertJ
+    testImplementation testLibraries.kotlinMockito
+}
+

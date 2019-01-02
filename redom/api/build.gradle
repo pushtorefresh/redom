@@ -1,0 +1,9 @@
+// Modified version of file from Domic project (see NOTICE).
+
+apply plugin: 'java-library'
+apply plugin: 'kotlin'
+
+dependencies {
+    api libraries.kotlinStdlib
+    api libraries.rxJava
+}
