@@ -7,7 +7,7 @@ import io.reactivex.Observable
 @Dom.RootDsl
 interface TextView<O> : View<O, TextView.Observe, TextView.Change> {
     interface Observe : View.Observe {
-        var textChanges: Observable<out CharSequence>
+        val textChanges: Observable<out CharSequence>
     }
 
     interface Change : View.Change {
