@@ -21,6 +21,6 @@ class Adapter(
     }
 
     override fun onBindViewHolder(holder: RecyclerViewViewHolder, position: Int) {
-        components[position].bind(holder.itemView)
+        TODO()
     }
 }
