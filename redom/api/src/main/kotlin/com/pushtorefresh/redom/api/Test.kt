@@ -10,7 +10,7 @@ private sealed class MyUiAction {
 }
 
 private fun f() {
-    RecyclerDom<MyUiAction> {
+    val dom = RecyclerDom<MyUiAction> {
 
         TextView {
 
@@ -41,9 +41,11 @@ private fun f() {
             }
         }
     }.build()
+
+    render(dom)
 }
 
-fun <O> render(components: List<Component>) : RenderResult<O> {
+fun <O> render(dom: ComponentGroup<O>) : RenderResult<O> {
     TODO()
 }
 
