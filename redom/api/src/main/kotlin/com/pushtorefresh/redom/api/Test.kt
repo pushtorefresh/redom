@@ -1,6 +1,6 @@
 package com.pushtorefresh.redom.api
 
-import com.pushtorefresh.redom.api.LinearLayout.Orientation.*
+import com.pushtorefresh.redom.api.LinearLayout.Orientation.Vertical
 import io.reactivex.Observable
 
 private fun <O> AndroidDom(lambda: Dom<O>.() -> Unit): Dom<O> = TODO()
@@ -40,5 +40,12 @@ private fun f() {
                 // this call should go to LinearLayout
             }
         }
-    }
+    }.build()
 }
+
+fun <O> render(components: List<Component>) : RenderResult<O> {
+    TODO()
+}
+
+data class RenderResult<O>(val output: Observable<O>,
+                           val rawOutput: Observable<Any>)
