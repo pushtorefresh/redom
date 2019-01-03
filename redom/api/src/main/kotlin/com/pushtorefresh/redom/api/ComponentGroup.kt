@@ -1,5 +1,5 @@
 package com.pushtorefresh.redom.api
 
-interface ComponentGroup : Component {
-    val children: List<Component>
+interface ComponentGroup<O> : Component<O> {
+    val children: List<Component<O>>
 }

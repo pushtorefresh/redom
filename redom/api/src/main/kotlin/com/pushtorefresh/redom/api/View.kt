@@ -24,5 +24,5 @@ interface View<O, Ob : View.Observe, Ch : View.Change> {
     fun observe(lambda: Ob.() -> Unit): Unit = lambda(observe)
     fun change(lambda: Ch.() -> Unit): Unit = lambda(change)
 
-    fun build(): Component
+    fun build(): Component<O>
 }

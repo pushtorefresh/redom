@@ -10,6 +10,6 @@ interface ViewGroup<O, Ob: ViewGroup.Observe, Ch: ViewGroup.Change> : Dom<O>, Vi
 
     }
 
-    override fun build(): ComponentGroup
+    override fun build(): ComponentGroup<O>
 }
 
