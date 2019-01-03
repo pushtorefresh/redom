@@ -22,4 +22,4 @@ interface LinearLayout<O> : ViewGroup<O, LinearLayout.Observe, LinearLayout.Chan
     fun init(lambda: Init.() -> Unit)
 }
 
-fun <O> Dom<O>.LinearLayout(lambda: LinearLayout<O>.() -> Unit): Unit = lambda(createComponent(LinearLayout::class.java) as LinearLayout<O>)
+fun <O> Dom<O>.LinearLayout(lambda: LinearLayout<O>.() -> Unit): Unit = lambda(createDsl(LinearLayout::class.java as Class<LinearLayout<O>>))

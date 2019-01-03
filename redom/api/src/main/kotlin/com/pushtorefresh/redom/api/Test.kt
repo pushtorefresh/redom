@@ -3,14 +3,14 @@ package com.pushtorefresh.redom.api
 import com.pushtorefresh.redom.api.LinearLayout.Orientation.Vertical
 import io.reactivex.Observable
 
-private fun <O> AndroidDom(lambda: Dom<O>.() -> Unit): Dom<O> = TODO()
+private fun <O> RecyclerDom(lambda: Dom<O>.() -> Unit): Dom<O> = TODO()
 
 private sealed class MyUiAction {
     object MyTextViewClick : MyUiAction()
 }
 
 private fun f() {
-    AndroidDom<MyUiAction> {
+    RecyclerDom<MyUiAction> {
 
         TextView {
 
