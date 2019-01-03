@@ -1,6 +1,6 @@
 package com.pushtorefresh.redom.api
 
-interface ViewGroup<O, Ob: ViewGroup.Observe, Ch: ViewGroup.Change> : Dom<O> {
+interface ViewGroup<O, Ob: ViewGroup.Observe, Ch: ViewGroup.Change> : Dom<O>, View<O, Ob, Ch> {
 
     interface Observe : View.Observe {
 
@@ -10,6 +10,6 @@ interface ViewGroup<O, Ob: ViewGroup.Observe, Ch: ViewGroup.Change> : Dom<O> {
 
     }
 
-    override fun build(): List<Component>
+    override fun build(): ComponentGroup
 }
 
