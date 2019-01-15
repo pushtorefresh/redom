@@ -22,11 +22,15 @@ class MainActivity : AppCompatActivity() {
         recyclerView.adapter = adapter
         recyclerView.layoutManager = LinearLayoutManager(this)
         findViewById<ViewGroup>(android.R.id.content).addView(recyclerView)
-        androidDom<UI> {
-            TextView {
-                change.text = Observable.just("")
+
+        val dom = androidDom<UI> {
+            repeat(100) { index ->
+                TextView {
+                    change.text = Observable.just(index.toString())
+                }
             }
         }.build()
+        adapter.setComponents(dom.children)
     }
 
     object UI

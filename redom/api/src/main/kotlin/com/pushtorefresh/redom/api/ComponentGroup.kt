@@ -24,6 +24,6 @@ interface ComponentGroup<O> : Component<O> {
                 observeProperties: Map<String, Observable<*>>,
                 changeProperties: Map<String, Observable<*>>,
                 children: List<Component<O>>
-        ): Component<O> = DComponentGroup(clazz, output, rawOutput, initProperties, observeProperties, changeProperties, children)
+        ): ComponentGroup<O> = DComponentGroup(clazz, output, rawOutput, initProperties, observeProperties, changeProperties, children)
     }
 }
