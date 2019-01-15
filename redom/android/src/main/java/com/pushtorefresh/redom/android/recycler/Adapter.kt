@@ -1,26 +1,41 @@
 package com.pushtorefresh.redom.android.recycler
 
 import android.support.v7.widget.RecyclerView
-import android.view.View
 import android.view.ViewGroup
+import com.pushtorefresh.redom.api.Component
+import com.pushtorefresh.redom.api.TextView
+import com.pushtorefresh.redom.api.View
 
 class Adapter(
         private val viewTypeRegistry: ViewTypeRegistry,
-        private val inflator: (Class<out Component>, parent: ViewGroup?) -> View
-) : RecyclerView.Adapter<RecyclerViewViewHolder>() {
+        private val inflator: (Class<out View<*, *, *>>, parent: ViewGroup) -> RecyclerView.ViewHolder
+) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
-    private val components: List<Component> = listOf()
+    private var components: List<Component<*>> = listOf()
 
     override fun getItemCount() = components.size
 
-    override fun getItemViewType(position: Int) = viewTypeRegistry.viewTypeOf(components[position]::class.java)
+    override fun getItemViewType(position: Int) = viewTypeRegistry.viewTypeOf(components[position].clazz)
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerViewViewHolder {
-        val view = inflator(viewTypeRegistry.componentClassOf(viewType), parent)
-        return RecyclerViewViewHolder(view)
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
+        return inflator(viewTypeRegistry.componentClassOf(viewType), parent)
     }
 
-    override fun onBindViewHolder(holder: RecyclerViewViewHolder, position: Int) {
-        TODO()
+    override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
+        (holder as TextViewViewHolder).bind(components[position]) // TODO
+    }
+
+    fun setComponents(components: List<Component<*>>) {
+        this.components = components
+        notifyDataSetChanged()
+    }
+}
+
+object Inflator : (Class<out View<*, *, *>>, ViewGroup) -> RecyclerView.ViewHolder {
+    override fun invoke(viewClass: Class<out View<*, *, *>>, parent: ViewGroup): RecyclerView.ViewHolder {
+        return when (viewClass) {
+            TextView::class.java -> TextViewViewHolder(android.widget.TextView(parent.context))
+            else -> TODO()
+        }
     }
 }

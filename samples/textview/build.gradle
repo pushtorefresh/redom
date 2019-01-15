@@ -1,0 +1,22 @@
+apply plugin: 'com.android.application'
+apply plugin: 'kotlin-android'
+apply plugin: 'kotlin-android-extensions'
+android {
+    defaultConfig {
+        minSdkVersion versions.minSdk
+        compileSdkVersion versions.compileSdk
+
+        buildToolsVersion versions.buildTools
+    }
+
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
+    }
+}
+
+dependencies {
+    implementation project(":redom:android")
+    implementation libraries.kotlinStdlib
+    implementation supportLibraries.appCompat
+}

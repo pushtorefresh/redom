@@ -1,3 +1,4 @@
 include ':redom:api'
 include ':redom:android'
 include ':redom:util'
+include ':samples:textview'

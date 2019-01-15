@@ -23,10 +23,11 @@ dependencies {
 
 dependencies {
     implementation project(':redom:util')
-    implementation supportLibraries.recyclerView
+    api supportLibraries.recyclerView
     implementation libraries.rxAndroid
     implementation libraries.rxBinding
     implementation libraries.rxReplayingShareKotlin
+    implementation libraries.rxKotlin
 }
 
 dependencies {

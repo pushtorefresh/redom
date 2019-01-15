@@ -3,7 +3,7 @@ package com.pushtorefresh.redom.api
 import io.reactivex.Observable
 
 interface Component<O> {
-    val clazz: Class<*>
+    val clazz: Class<out View<*, *, *>>
     val output: Observable<O>
     val rawOutput: Observable<*>
 
@@ -11,8 +11,10 @@ interface Component<O> {
     val observeProperties: Map<String, Observable<*>>
     val changeProperties: Map<String, Observable<*>>
 
+    fun <T> getChangeProperty(name: String): Observable<T> = changeProperties[name] as Observable<T>
+
     private data class DComponent<O>(
-            override val clazz: Class<*>,
+            override val clazz: Class<out View<*, *, *>>,
             override val output: Observable<O>,
             override val rawOutput: Observable<*>,
             override val initProperties: Map<String, *>,
@@ -22,7 +24,7 @@ interface Component<O> {
 
     companion object {
         fun <O> create(
-                clazz: Class<*>,
+                clazz: Class<out View<*, *, *>>,
                 output: Observable<O>,
                 rawOutput: Observable<*>,
                 initProperties: Map<String, *>,
