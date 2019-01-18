@@ -15,8 +15,8 @@ class TextViewImpl<O> : TextView<O> {
     private val changeProperties = mutableMapOf<String, Observable<*>>()
 
     override val observe = object: TextView.Observe {
-        override val textChanges = observeProperties[O_PROPERTY_TEXT_CHANGES] as Observable<out CharSequence>
-        override val clicks = observeProperties[O_PROPERTY_CLICKS] as Observable<Any>
+        override val textChanges by lazy { observeProperties[O_PROPERTY_TEXT_CHANGES] as Observable<out CharSequence> }
+        override val clicks by lazy { observeProperties[O_PROPERTY_CLICKS] as Observable<Any> }
     }
 
     override val change = object: TextView.Change {
