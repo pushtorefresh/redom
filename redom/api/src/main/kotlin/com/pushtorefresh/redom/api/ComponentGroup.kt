@@ -1,5 +1,6 @@
 package com.pushtorefresh.redom.api
 
+import com.jakewharton.rxrelay2.Relay
 import io.reactivex.Observable
 
 interface ComponentGroup<O> : Component<O> {
@@ -10,7 +11,7 @@ interface ComponentGroup<O> : Component<O> {
             override val output: Observable<O>,
             override val rawOutput: Observable<*>,
             override val initProperties: Map<String, *>,
-            override val observeProperties: Map<String, Observable<*>>,
+            override val observeProperties: Map<String, Relay<*>>,
             override val changeProperties: Map<String, Observable<*>>,
             override val children: List<Component<O>>
     ) : ComponentGroup<O>
@@ -21,7 +22,7 @@ interface ComponentGroup<O> : Component<O> {
                 output: Observable<O>,
                 rawOutput: Observable<*>,
                 initProperties: Map<String, *>,
-                observeProperties: Map<String, Observable<*>>,
+                observeProperties: Map<String, Relay<*>>,
                 changeProperties: Map<String, Observable<*>>,
                 children: List<Component<O>>
         ): ComponentGroup<O> = DComponentGroup(clazz, output, rawOutput, initProperties, observeProperties, changeProperties, children)
