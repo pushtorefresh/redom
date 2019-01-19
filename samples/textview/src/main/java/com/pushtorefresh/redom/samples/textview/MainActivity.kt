@@ -27,6 +27,8 @@ class MainActivity : AppCompatActivity() {
             repeat(100) { index ->
                 TextView {
                     change.text = Observable.just(index.toString())
+                    output += observe.textChanges.doOnNext { println("Text change observed $it") }.map { UI }
+                    output += observe.clicks.doOnNext { println("Click observed $it") }.map { UI }
                 }
             }
         }.build()

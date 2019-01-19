@@ -1,5 +1,6 @@
 package com.pushtorefresh.redom.api
 
+import com.jakewharton.rxrelay2.Relay
 import io.reactivex.Observable
 
 interface Component<O> {
@@ -8,17 +9,15 @@ interface Component<O> {
     val rawOutput: Observable<*>
 
     val initProperties: Map<String, *>
-    val observeProperties: Map<String, Observable<*>>
+    val observeProperties: Map<String, Relay<*>>
     val changeProperties: Map<String, Observable<*>>
-
-    fun <T> getChangeProperty(name: String): Observable<T> = changeProperties[name] as Observable<T>
 
     private data class DComponent<O>(
             override val clazz: Class<out View<*, *, *>>,
             override val output: Observable<O>,
             override val rawOutput: Observable<*>,
             override val initProperties: Map<String, *>,
-            override val observeProperties: Map<String, Observable<*>>,
+            override val observeProperties: Map<String, Relay<*>>,
             override val changeProperties: Map<String, Observable<*>>
     ) : Component<O>
 
@@ -28,7 +27,7 @@ interface Component<O> {
                 output: Observable<O>,
                 rawOutput: Observable<*>,
                 initProperties: Map<String, *>,
-                observeProperties: Map<String, Observable<*>>,
+                observeProperties: Map<String, Relay<*>>,
                 changeProperties: Map<String, Observable<*>>
         ): Component<O> = DComponent(clazz, output, rawOutput, initProperties, observeProperties, changeProperties)
     }
