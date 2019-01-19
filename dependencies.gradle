@@ -1,7 +1,7 @@
 // Modified version of file from Domic project (see NOTICE).
 
 ext.versions = [
-        agp                    : '3.3.0-rc03',
+        agp                    : '3.3.0',
         buildTools             : '28.0.3',
         compileSdk             : 28,
         targetSdk              : 27,
@@ -18,8 +18,7 @@ ext.versions = [
         rxReplayingShare       : '2.0.1',
         rxRedux                : '1.0.0',
 
-        support                : '27.1.1',
-        supportConstraintLayout: '1.0.2',
+        androidx               : '1.0.0',
 
         junit                  : '4.12',
         kotlinMockito          : '1.5.0',
@@ -38,11 +37,10 @@ ext.libraries = [
         koptionalRxJava2      : "com.gojuno.koptional:koptional-rxjava2-extensions:$versions.koptional",
 ]
 
-ext.supportLibraries = [
-        annotations     : "com.android.support:support-annotations:$versions.support",
-        appCompat       : "com.android.support:appcompat-v7:$versions.support",
-        constraintLayout: "com.android.support.constraint:constraint-layout:$versions.supportConstraintLayout",
-        recyclerView    : "com.android.support:recyclerview-v7:$versions.support",
+ext.androidXLibraries = [
+        annotations     : "androidx.annotation:annotation:$versions.androidx",
+        appCompat       : "androidx.appcompat:appcompat:$versions.androidx",
+        recyclerView    : "androidx.recyclerview:recyclerview:$versions.androidx",
 ]
 
 ext.testLibraries = [

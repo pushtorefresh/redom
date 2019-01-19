@@ -1,10 +1,10 @@
 package com.pushtorefresh.redom.android.recycler
 
-import android.support.v7.widget.RecyclerView
 import android.widget.TextView
 import com.jakewharton.rxbinding2.view.RxView
 import com.jakewharton.rxbinding2.widget.RxTextView
 import com.jakewharton.rxrelay2.Relay
+import androidx.recyclerview.widget.RecyclerView
 import com.pushtorefresh.redom.android.view.TextViewImpl
 import com.pushtorefresh.redom.api.Component
 import io.reactivex.disposables.CompositeDisposable

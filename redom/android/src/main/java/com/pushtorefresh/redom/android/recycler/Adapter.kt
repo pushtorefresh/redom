@@ -1,7 +1,7 @@
 package com.pushtorefresh.redom.android.recycler
 
-import android.support.v7.widget.RecyclerView
 import android.view.ViewGroup
+import androidx.recyclerview.widget.RecyclerView
 import com.pushtorefresh.redom.api.Component
 import com.pushtorefresh.redom.api.TextView
 import com.pushtorefresh.redom.api.View
