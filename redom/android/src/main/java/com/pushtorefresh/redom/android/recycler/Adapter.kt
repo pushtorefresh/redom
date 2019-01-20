@@ -1,6 +1,7 @@
 package com.pushtorefresh.redom.android.recycler
 
 import android.view.ViewGroup
+import androidx.appcompat.widget.AppCompatTextView
 import androidx.recyclerview.widget.RecyclerView
 import com.pushtorefresh.redom.api.Component
 import com.pushtorefresh.redom.api.TextView
@@ -34,7 +35,7 @@ class Adapter(
 object Inflator : (Class<out View<*, *, *>>, ViewGroup) -> RecyclerView.ViewHolder {
     override fun invoke(viewClass: Class<out View<*, *, *>>, parent: ViewGroup): RecyclerView.ViewHolder {
         return when (viewClass) {
-            TextView::class.java -> TextViewViewHolder(android.widget.TextView(parent.context))
+            TextView::class.java -> TextViewViewHolder(AppCompatTextView(parent.context))
             else -> TODO()
         }
     }

@@ -1,17 +1,17 @@
 package com.pushtorefresh.redom.android.recycler
 
-import android.widget.TextView
+import androidx.appcompat.widget.AppCompatTextView
+import androidx.recyclerview.widget.RecyclerView
 import com.jakewharton.rxbinding2.view.RxView
 import com.jakewharton.rxbinding2.widget.RxTextView
 import com.jakewharton.rxrelay2.Relay
-import androidx.recyclerview.widget.RecyclerView
 import com.pushtorefresh.redom.android.view.TextViewImpl
 import com.pushtorefresh.redom.api.Component
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.functions.Consumer
 import io.reactivex.rxkotlin.plusAssign
 
-class TextViewViewHolder(private val textView: TextView) : RecyclerView.ViewHolder(textView) {
+class TextViewViewHolder(private val textView: AppCompatTextView) : RecyclerView.ViewHolder(textView) {
     private val disposable = CompositeDisposable()
 
     fun bind(component: Component<*>) {

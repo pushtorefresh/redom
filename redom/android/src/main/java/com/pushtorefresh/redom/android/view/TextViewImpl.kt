@@ -37,6 +37,7 @@ class TextViewImpl<O> : TextView<O> {
     }
 
     override val change = object : TextView.Change {
+        @Suppress("UNCHECKED_CAST")
         override var text: Observable<out CharSequence>
             get() = changeProperties[C_PROPERTY_TEXT] as Observable<out CharSequence>
             set(value) {
