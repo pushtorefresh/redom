@@ -18,5 +18,5 @@ android {
 dependencies {
     implementation project(":redom:android")
     implementation libraries.kotlinStdlib
-    implementation supportLibraries.appCompat
+    implementation androidXLibraries.appCompat
 }

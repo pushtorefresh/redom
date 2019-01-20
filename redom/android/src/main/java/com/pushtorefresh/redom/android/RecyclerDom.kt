@@ -1,7 +1,11 @@
 package com.pushtorefresh.redom.android
 
 import com.pushtorefresh.redom.android.view.TextViewImpl
-import com.pushtorefresh.redom.api.*
+import com.pushtorefresh.redom.api.ComponentGroup
+import com.pushtorefresh.redom.api.Dom
+import com.pushtorefresh.redom.api.LinearLayout
+import com.pushtorefresh.redom.api.TextView
+import com.pushtorefresh.redom.api.View
 import io.reactivex.Observable
 
 internal class RecyclerDom<O> : Dom<O> {
@@ -21,6 +25,7 @@ internal class RecyclerDom<O> : Dom<O> {
     }
 
     override fun <Ob : View.Observe, Ch : View.Change, V : View<O, Ob, Ch>> createDsl(clazz: Class<out V>): V {
+        @Suppress("UNCHECKED_CAST")
         val view = when (clazz) {
             TextView::class.java -> TextViewImpl<O>() as V
             else -> TODO()

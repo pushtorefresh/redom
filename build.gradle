@@ -25,3 +25,4 @@ allprojects {
 
 apply from: "$rootDir/gradle/lint.gradle"
 apply from: "$rootDir/gradle/dependency-resolution.gradle"
+apply from: "$rootDir/gradle/kotlin.gradle"

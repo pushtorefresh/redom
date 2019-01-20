@@ -15,7 +15,7 @@ subprojects { subProject ->
                         failOnVersionConflict()
 
                         def allLibraries = libraries.values() +
-                                supportLibraries.values() +
+                                androidXLibraries.values() +
                                 testLibraries.values()
 
                         allLibraries.each { library -> force library }

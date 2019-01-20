@@ -1,0 +1,23 @@
+void configureCompileTask(project, task) {
+    def taskName = task.name
+
+    if (taskName.startsWith('compile') && taskName.toLowerCase().contains('kotlin')) {
+        project.configure(task) {
+            kotlinOptions {
+                allWarningsAsErrors = true
+            }
+        }
+    }
+}
+
+subprojects {
+    project.afterEvaluate {
+        def isKotlin = project.getPlugins().hasPlugin('kotlin') || plugins.hasPlugin('kotlin-android')
+
+        if (isKotlin) {
+            project
+                    .tasks
+                    .whenTaskAdded { task -> configureCompileTask(project, task) }
+        }
+    }
+}
