@@ -15,4 +15,4 @@ interface TextView<O> : View<O, TextView.Observe, TextView.Change> {
     }
 }
 
-fun <O> Dom<O>.TextView(lambda: TextView<O>.() -> Unit): Unit = lambda(createDsl(TextView::class.java as Class<TextView<O>>))
+fun <O> ViewParent<O>.TextView(lambda: TextView<O>.() -> Unit): Unit = lambda(createView(TextView::class.java as Class<TextView<O>>))

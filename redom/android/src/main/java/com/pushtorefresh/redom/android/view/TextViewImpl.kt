@@ -10,40 +10,26 @@ import io.reactivex.subjects.PublishSubject
 
 class TextViewImpl<O> : TextView<O> {
 
-    private val outputObservables = mutableListOf<Observable<O>>()
-    private val rawOutput = PublishSubject.create<Any>()
-    private val initProperties = mutableMapOf<String, Any>()
     private val observeProperties = mutableMapOf<String, Relay<*>>()
     private val changeProperties = mutableMapOf<String, Observable<*>>()
+    private val outputObservables = mutableListOf<Observable<O>>()
+    private val rawOutput = PublishSubject.create<Any>()
 
     override val observe = object : TextView.Observe {
         override val textChanges
-            get() = setupObserveProperty<CharSequence>(O_PROPERTY_TEXT_CHANGES)
+            get() = observeProperties.getOrPutAndGet(O_PROPERTY_TEXT_CHANGES) { PublishRelay.create<CharSequence>() }
 
         override val clicks
-            get() = setupObserveProperty<Any>(O_PROPERTY_CLICKS)
-
-        @Suppress("UNCHECKED_CAST")
-        fun <T> setupObserveProperty(name: String): Observable<T> {
-            var observable = observeProperties[name]
-
-            if (observable == null) {
-                observable = PublishRelay.create<T>()
-                observeProperties[name] = observable
-            }
-
-            return observable as Observable<T>
-        }
+            get() = observeProperties.getOrPutAndGet(O_PROPERTY_CLICKS) { PublishRelay.create<Any>() }
     }
 
     override val change = object : TextView.Change {
         @Suppress("UNCHECKED_CAST")
         override var text: Observable<out CharSequence>
-            get() = changeProperties[C_PROPERTY_TEXT] as Observable<out CharSequence>
+            get() = throw IllegalAccessError()
             set(value) {
                 changeProperties[C_PROPERTY_TEXT] = value
             }
-
     }
 
     override val output = object : View.Output<O> {
@@ -57,16 +43,15 @@ class TextViewImpl<O> : TextView<O> {
                 TextView::class.java,
                 Observable.merge(outputObservables),
                 rawOutput,
-                initProperties,
                 observeProperties,
                 changeProperties
         )
     }
 
     companion object {
-        val C_PROPERTY_TEXT = "c-text"
-        val O_PROPERTY_CLICKS = "o-clicks"
-        val O_PROPERTY_TEXT_CHANGES = "o-textChanges"
+        const val C_PROPERTY_TEXT = "c-text"
+        const val O_PROPERTY_CLICKS = "o-clicks"
+        const val O_PROPERTY_TEXT_CHANGES = "o-textChanges"
     }
 
 }
