@@ -32,8 +32,8 @@ private fun f() {
 
         LinearLayout {
 
-            init {
-                orientation = Vertical
+            change {
+                orientation = Observable.just(Vertical)
             }
 
             TextView {

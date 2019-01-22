@@ -8,7 +8,6 @@ interface Component<O> {
     val output: Observable<O>
     val rawOutput: Observable<*>
 
-    val initProperties: Map<String, *>
     val observeProperties: Map<String, Relay<*>>
     val changeProperties: Map<String, Observable<*>>
 
@@ -16,7 +15,6 @@ interface Component<O> {
             override val clazz: Class<out View<*, *, *>>,
             override val output: Observable<O>,
             override val rawOutput: Observable<*>,
-            override val initProperties: Map<String, *>,
             override val observeProperties: Map<String, Relay<*>>,
             override val changeProperties: Map<String, Observable<*>>
     ) : Component<O>
@@ -26,10 +24,9 @@ interface Component<O> {
                 clazz: Class<out View<*, *, *>>,
                 output: Observable<O>,
                 rawOutput: Observable<*>,
-                initProperties: Map<String, *>,
                 observeProperties: Map<String, Relay<*>>,
                 changeProperties: Map<String, Observable<*>>
-        ): Component<O> = DComponent(clazz, output, rawOutput, initProperties, observeProperties, changeProperties)
+        ): Component<O> = DComponent(clazz, output, rawOutput, observeProperties, changeProperties)
     }
 
 }

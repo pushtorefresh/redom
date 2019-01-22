@@ -7,8 +7,10 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.pushtorefresh.redom.android.androidDom
 import com.pushtorefresh.redom.android.recycler.Adapter
-import com.pushtorefresh.redom.android.recycler.Inflator
+import com.pushtorefresh.redom.android.recycler.Inflater
 import com.pushtorefresh.redom.android.recycler.ViewTypeRegistryImpl
+import com.pushtorefresh.redom.api.LinearLayout
+import com.pushtorefresh.redom.api.LinearLayout.Orientation.*
 import com.pushtorefresh.redom.api.TextView
 import io.reactivex.Observable
 
@@ -18,12 +20,30 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
         val recyclerView = RecyclerView(this)
-        val adapter = Adapter(ViewTypeRegistryImpl(), Inflator)
+        val adapter = Adapter(ViewTypeRegistryImpl(), Inflater)
         recyclerView.adapter = adapter
         recyclerView.layoutManager = LinearLayoutManager(this)
         findViewById<ViewGroup>(android.R.id.content).addView(recyclerView)
 
         val dom = androidDom<UI> {
+            LinearLayout {
+                change {
+                    orientation = Observable.just(Horizontal)
+                }
+
+                TextView {
+                    change {
+                        text = Observable.just("1")
+                    }
+                }
+
+                TextView {
+                    change {
+                        text = Observable.just("2")
+                    }
+                }
+            }
+
             repeat(100) { index ->
                 TextView {
                     change.text = Observable.just(index.toString())

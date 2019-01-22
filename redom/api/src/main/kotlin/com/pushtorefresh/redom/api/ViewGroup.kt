@@ -1,6 +1,6 @@
 package com.pushtorefresh.redom.api
 
-interface ViewGroup<O, Ob: ViewGroup.Observe, Ch: ViewGroup.Change> : Dom<O>, View<O, Ob, Ch> {
+interface ViewGroup<O, Ob: ViewGroup.Observe, Ch: ViewGroup.Change> : View<O, Ob, Ch>, ViewParent<O> {
 
     interface Observe : View.Observe {
 
