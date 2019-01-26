@@ -3,7 +3,7 @@ package com.pushtorefresh.redom.api
 import com.pushtorefresh.redom.api.LinearLayout.Orientation.Vertical
 import io.reactivex.Observable
 
-private fun <O> RecyclerDom(lambda: Dom<O>.() -> Unit): Dom<O> = TODO()
+private fun <O: Any> RecyclerDom(lambda: Dom<O>.() -> Unit): Dom<O> = TODO()
 
 private sealed class MyUiAction {
     object MyTextViewClick : MyUiAction()
@@ -45,7 +45,7 @@ private fun f() {
     render(dom)
 }
 
-fun <O> render(dom: ComponentGroup<O>) : RenderResult<O> {
+fun <O : Any> render(dom: ComponentGroup<O, *>) : RenderResult<O> {
     TODO()
 }
 
