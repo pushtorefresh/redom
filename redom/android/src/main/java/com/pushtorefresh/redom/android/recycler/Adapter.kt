@@ -3,54 +3,55 @@ package com.pushtorefresh.redom.android.recycler
 import android.view.ViewGroup
 import androidx.appcompat.widget.AppCompatTextView
 import androidx.recyclerview.widget.RecyclerView
-import com.pushtorefresh.redom.api.*
+import com.pushtorefresh.redom.api.Component
+import com.pushtorefresh.redom.api.ComponentGroup
+import com.pushtorefresh.redom.api.LinearLayout
+import com.pushtorefresh.redom.api.TextView
+import com.pushtorefresh.redom.api.View
 
 class Adapter(
         private val viewTypeRegistry: ViewTypeRegistry,
-        private val inflater: (Class<out View<*, *, *>>, parent: ViewGroup) -> RecyclerView.ViewHolder
-) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
+        private val inflater: (Class<out View<*, *, *>>, parent: ViewGroup) -> ComponentViewHolder
+) : RecyclerView.Adapter<ComponentViewHolder>() {
 
-    private var components: List<Component<*>> = listOf()
+    private var components: List<Component<out Any, out Any>> = listOf()
 
     override fun getItemCount() = components.size
 
     override fun getItemViewType(position: Int) = viewTypeRegistry.viewTypeOf(components[position].clazz)
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ComponentViewHolder {
         return inflater(viewTypeRegistry.componentClassOf(viewType), parent)
     }
 
-    override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
+    override fun onBindViewHolder(holder: ComponentViewHolder, position: Int) {
         val component = components[position]
-
-        when (component.clazz) {
-            TextView::class.java -> (holder as TextViewViewHolder).bind(component)
-            LinearLayout::class.java -> (holder as LinearLayoutViewHolder).bind(component as ComponentGroup<*>)
-        }
-
+        @Suppress("UNCHECKED_CAST")
+        holder.bind(component as Component<out Any, Any>)
         if (component is ComponentGroup) {
             component
                     .children
                     .forEach { child ->
-                        val parent = holder as LinearLayoutViewHolder
-                        val horder = inflater(child.clazz, holder.itemView as ViewGroup)
-                        (parent.itemView as ViewGroup).addView(horder.itemView)
-                        (horder as TextViewViewHolder).bind(child)
+                        val childHolder = inflater(child.clazz, holder.itemView as ViewGroup)
+                        holder.itemView.addView(childHolder.itemView)
+                        @Suppress("UNCHECKED_CAST")
+                        childHolder.bind(child as Component<out Any, Any>)
+                        // TODO move to onCreateViewHolder
                     }
         }
     }
 
-    fun setComponents(components: List<Component<*>>) {
+    fun setComponents(components: List<Component<out Any,out Any>>) {
         this.components = components
         notifyDataSetChanged()
     }
 }
 
-object Inflater : (Class<out View<*, *, *>>, ViewGroup) -> RecyclerView.ViewHolder {
-    override fun invoke(viewClass: Class<out View<*, *, *>>, parent: ViewGroup): RecyclerView.ViewHolder {
+object Inflater : (Class<out View<*, *, *>>, ViewGroup) -> ComponentViewHolder {
+    override fun invoke(viewClass: Class<out View<*, *, *>>, parent: ViewGroup): ComponentViewHolder {
         return when (viewClass) {
-            TextView::class.java -> TextViewViewHolder(AppCompatTextView(parent.context))
-            LinearLayout::class.java -> LinearLayoutViewHolder(android.widget.LinearLayout(parent.context))
+            TextView::class.java -> ComponentViewHolder(AppCompatTextView(parent.context))
+            LinearLayout::class.java -> ComponentViewHolder(android.widget.LinearLayout(parent.context))
             else -> TODO("Not implemented for $viewClass")
         }
     }

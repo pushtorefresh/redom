@@ -2,7 +2,7 @@ package com.pushtorefresh.redom.api
 
 import io.reactivex.Observable
 
-interface LinearLayout<O> : ViewGroup<O, LinearLayout.Observe, LinearLayout.Change> {
+interface LinearLayout<O : Any> : ViewGroup<O, LinearLayout.Observe, LinearLayout.Change> {
 
     interface Observe : ViewGroup.Observe {
 
@@ -18,4 +18,4 @@ interface LinearLayout<O> : ViewGroup<O, LinearLayout.Observe, LinearLayout.Chan
     }
 }
 
-fun <O> ViewParent<O>.LinearLayout(lambda: LinearLayout<O>.() -> Unit): Unit = lambda(createView(LinearLayout::class.java as Class<LinearLayout<O>>))
+fun <O: Any> ViewParent<O>.LinearLayout(lambda: LinearLayout<O>.() -> Unit): Unit = lambda(createView(LinearLayout::class.java as Class<LinearLayout<O>>))

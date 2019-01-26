@@ -5,7 +5,7 @@ import com.pushtorefresh.redom.api.TextView
 import com.pushtorefresh.redom.api.View
 import com.pushtorefresh.redom.api.ViewParent
 
-class AndroidViewParent<O> : ViewParent<O> {
+class AndroidViewParent<O : Any> : ViewParent<O> {
     override fun <Ob : View.Observe, Ch : View.Change, V : View<O, Ob, Ch>> createView(clazz: Class<out V>): V {
         @Suppress("UNCHECKED_CAST")
         return when (clazz) {

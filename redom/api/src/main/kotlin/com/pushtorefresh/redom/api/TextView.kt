@@ -5,7 +5,7 @@ package com.pushtorefresh.redom.api
 import io.reactivex.Observable
 
 @Dom.RootDsl
-interface TextView<O> : View<O, TextView.Observe, TextView.Change> {
+interface TextView<O : Any> : View<O, TextView.Observe, TextView.Change> {
     interface Observe : View.Observe {
         val textChanges: Observable<out CharSequence>
     }
@@ -15,4 +15,4 @@ interface TextView<O> : View<O, TextView.Observe, TextView.Change> {
     }
 }
 
-fun <O> ViewParent<O>.TextView(lambda: TextView<O>.() -> Unit): Unit = lambda(createView(TextView::class.java as Class<TextView<O>>))
+fun <O : Any> ViewParent<O>.TextView(lambda: TextView<O>.() -> Unit): Unit = lambda(createView(TextView::class.java as Class<TextView<O>>))

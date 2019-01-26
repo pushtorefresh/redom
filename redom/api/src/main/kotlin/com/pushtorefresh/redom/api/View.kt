@@ -4,7 +4,7 @@ package com.pushtorefresh.redom.api
 
 import io.reactivex.Observable
 
-interface View<O, Ob : View.Observe, Ch : View.Change> {
+interface View<O : Any, Ob : View.Observe, Ch : View.Change> {
 
     interface Observe {
         val clicks: Observable<Any>
@@ -24,5 +24,5 @@ interface View<O, Ob : View.Observe, Ch : View.Change> {
     fun observe(lambda: Ob.() -> Unit): Unit = lambda(observe)
     fun change(lambda: Ch.() -> Unit): Unit = lambda(change)
 
-    fun build(): Component<O>
+    fun build(): Component<O, out Any>
 }
