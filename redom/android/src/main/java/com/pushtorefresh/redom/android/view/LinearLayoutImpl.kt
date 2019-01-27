@@ -2,13 +2,9 @@ package com.pushtorefresh.redom.android.view
 
 import com.jakewharton.rxbinding2.view.RxView
 import com.jakewharton.rxrelay2.PublishRelay
-import com.pushtorefresh.redom.api.Component
-import com.pushtorefresh.redom.api.ComponentGroup
-import com.pushtorefresh.redom.api.LinearLayout
+import com.pushtorefresh.redom.api.*
 import com.pushtorefresh.redom.api.LinearLayout.Orientation.Horizontal
 import com.pushtorefresh.redom.api.LinearLayout.Orientation.Vertical
-import com.pushtorefresh.redom.api.View
-import com.pushtorefresh.redom.api.ViewParent
 import io.reactivex.Observable
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.disposables.Disposable
@@ -67,7 +63,8 @@ private class LinearLayoutComponent<O : Any>(private val observeClicks: PublishR
                                              override val rawOutput: Observable<*>) :
         ComponentGroup<O, android.widget.LinearLayout> {
 
-    override val clazz: Class<out View<*, *, *>> = LinearLayout::class.java
+    override val clazz: Class<out ViewGroup<out Any, out ViewGroup.Observe, out ViewGroup.Change>> = LinearLayout::class.java
+
     override fun bind(view: android.widget.LinearLayout): Disposable {
         val disposable = CompositeDisposable()
         if (observeClicks != null) disposable += RxView.clicks(view)
@@ -79,6 +76,12 @@ private class LinearLayoutComponent<O : Any>(private val observeClicks: PublishR
                 Vertical -> android.widget.LinearLayout.VERTICAL
             }
         }
+
+        children.forEachIndexed { index, component ->
+            @Suppress("UNCHECKED_CAST")
+            disposable += (component as Component<O, android.view.View>).bind(view.getChildAt(index))
+        }
+
         return disposable
     }
 }

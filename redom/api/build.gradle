@@ -8,3 +8,10 @@ dependencies {
     api libraries.rxJava
     api libraries.rxRelay
 }
+
+dependencies {
+    testImplementation testLibraries.junit
+    testImplementation testLibraries.assertJ
+    testImplementation testLibraries.kotlinMockito
+    testImplementation project(':redom:test-util')
+}

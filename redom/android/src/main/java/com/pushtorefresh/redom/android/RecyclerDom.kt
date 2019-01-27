@@ -1,11 +1,7 @@
 package com.pushtorefresh.redom.android
 
 import com.pushtorefresh.redom.android.view.AndroidViewParent
-import com.pushtorefresh.redom.api.Component
-import com.pushtorefresh.redom.api.ComponentGroup
-import com.pushtorefresh.redom.api.Dom
-import com.pushtorefresh.redom.api.View
-import com.pushtorefresh.redom.api.ViewParent
+import com.pushtorefresh.redom.api.*
 import io.reactivex.Observable
 import io.reactivex.disposables.Disposable
 
@@ -20,7 +16,7 @@ internal class RecyclerDom<O : Any>(private val viewParent: ViewParent<O>) : Dom
         val childComponents = views.map(View<O, *, *>::build)
         return object : ComponentGroup<O, Any> {
             override val children: List<Component<O, out Any>> = childComponents
-            override val clazz: Class<out View<*, *, *>>
+            override val clazz: Class<out ViewGroup<*, *, *>>
                 get() = TODO("not implemented") //To change initializer of created properties use File | Settings | File Templates.
             override val output: Observable<O>
                 get() = TODO("not implemented") //To change initializer of created properties use File | Settings | File Templates.
