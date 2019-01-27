@@ -1,9 +1,9 @@
 package com.pushtorefresh.redom.android.recycler
 
-import com.pushtorefresh.redom.api.View
-
+import com.pushtorefresh.redom.api.Component
+import com.pushtorefresh.redom.api.ViewTree
 
 interface ViewTypeRegistry {
-    fun viewTypeOf(clazz: Class<out View<*, *, *>>): Int
-    fun componentClassOf(viewType: Int): Class<out View<*, *, *>>
+    fun viewTypeOf(component: Component<out Any, out Any>): Int
+    fun viewTreeOf(viewType: Int): ViewTree
 }
