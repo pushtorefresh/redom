@@ -7,7 +7,7 @@ import com.pushtorefresh.redom.api.*
 
 class Adapter(
         private val viewTypeRegistry: ViewTypeRegistry,
-        private val inflater: (ViewTree, parent: ViewGroup) -> android.view.View
+        private val inflater: (ViewStructure, parent: ViewGroup) -> android.view.View
 ) : RecyclerView.Adapter<ComponentViewHolder>() {
 
     private var components: List<Component<out Any, out Any>> = listOf()
@@ -30,18 +30,18 @@ class Adapter(
     }
 }
 
-object Inflater : (ViewTree, ViewGroup) -> android.view.View {
-    override fun invoke(viewTree: ViewTree, parent: ViewGroup): android.view.View {
-        return when (viewTree) {
-            is ViewTree.View -> when (viewTree.clazz) {
+object Inflater : (ViewStructure, ViewGroup) -> android.view.View {
+    override fun invoke(viewStructure: ViewStructure, parent: ViewGroup): android.view.View {
+        return when (viewStructure) {
+            is ViewStructure.View -> when (viewStructure.clazz) {
                 TextView::class.java -> AppCompatTextView(parent.context)
-                else -> throw IllegalArgumentException("Inflating of ${viewTree.clazz} is not supported yet")
+                else -> throw IllegalArgumentException("Inflating of ${viewStructure.clazz} is not supported yet")
             }
-            is ViewTree.ViewGroup -> when (viewTree.clazz) {
+            is ViewStructure.ViewGroup -> when (viewStructure.clazz) {
                 LinearLayout::class.java -> android.widget.LinearLayout(parent.context)
-                else -> throw IllegalArgumentException("Inflating of ${viewTree.clazz} is not supported yet")
+                else -> throw IllegalArgumentException("Inflating of ${viewStructure.clazz} is not supported yet")
             }.also { viewGroup: ViewGroup ->
-                viewTree.children.forEach { viewGroup.addView(invoke(it, parent)) }
+                viewStructure.children.forEach { viewGroup.addView(invoke(it, parent)) }
             }
         }
     }

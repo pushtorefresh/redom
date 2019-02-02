@@ -7,16 +7,15 @@ import com.jakewharton.rxrelay2.PublishRelay
 import com.pushtorefresh.redom.api.Component
 import com.pushtorefresh.redom.api.TextView
 import com.pushtorefresh.redom.api.View
+import com.pushtorefresh.redom.api.toViewStructure
 import io.reactivex.Observable
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.disposables.Disposable
 import io.reactivex.rxkotlin.plusAssign
-import io.reactivex.subjects.PublishSubject
 
 class TextViewImpl<O : Any> : TextView<O> {
 
     private val outputObservables = mutableListOf<Observable<O>>()
-    private val rawOutput = PublishSubject.create<Any>()
     private var observeClicks: PublishRelay<Any>? = null
     private var observeText: PublishRelay<CharSequence>? = null
     private var changeText: Observable<out CharSequence>? = null
@@ -52,8 +51,7 @@ class TextViewImpl<O : Any> : TextView<O> {
                                  observeText,
                                  changeText,
                                  TextView::class.java,
-                                 Observable.merge(outputObservables),
-                                 rawOutput
+                                 Observable.merge(outputObservables)
         )
     }
 }
@@ -62,9 +60,8 @@ private class TextViewComponent<O : Any>(private val observeClicks: PublishRelay
                                    private val observeText: PublishRelay<CharSequence>?,
                                    private val changeText: Observable<out CharSequence>?,
                                    override val clazz: Class<out View<*, *, *>>,
-                                   override val output: Observable<O>,
-                                   override val rawOutput: Observable<*>) : Component<O, AppCompatTextView> {
-
+                                   override val output: Observable<O>) : Component<O, AppCompatTextView> {
+    override val viewStructure = toViewStructure()
     override fun bind(view: AppCompatTextView): Disposable {
         val disposable = CompositeDisposable()
         if(observeClicks != null) disposable += RxView.clicks(view).subscribe(observeClicks)
