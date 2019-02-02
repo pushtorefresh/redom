@@ -66,7 +66,7 @@ private class LinearLayoutComponent<O : Any>(private val observeClicks: PublishR
         ComponentGroup<O, android.widget.LinearLayout> {
 
     override val clazz: Class<out ViewGroup<out Any, out ViewGroup.Observe, out ViewGroup.Change>> = LinearLayout::class.java
-    override val viewStructure = toViewStructure()
+    override val viewStructure = toViewStructure(this)
 
     override fun bind(view: android.widget.LinearLayout): Disposable {
         val disposable = CompositeDisposable()

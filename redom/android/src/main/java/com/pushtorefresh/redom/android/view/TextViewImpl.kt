@@ -61,7 +61,7 @@ private class TextViewComponent<O : Any>(private val observeClicks: PublishRelay
                                    private val changeText: Observable<out CharSequence>?,
                                    override val clazz: Class<out View<*, *, *>>,
                                    override val output: Observable<O>) : Component<O, AppCompatTextView> {
-    override val viewStructure = toViewStructure()
+    override val viewStructure = toViewStructure(this)
     override fun bind(view: AppCompatTextView): Disposable {
         val disposable = CompositeDisposable()
         if(observeClicks != null) disposable += RxView.clicks(view).subscribe(observeClicks)

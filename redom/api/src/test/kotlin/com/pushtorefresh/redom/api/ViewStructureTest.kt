@@ -2,7 +2,7 @@ package com.pushtorefresh.redom.api
 
 import com.pushtorefresh.redom.testutil.createComponent
 import com.pushtorefresh.redom.testutil.createComponentGroup
-import org.assertj.core.api.Assertions
+import org.assertj.core.api.Assertions.assertThat
 import org.junit.Test
 
 class ViewStructureTest {
@@ -11,14 +11,14 @@ class ViewStructureTest {
     fun toViewStructure_TextView() {
         val textView = createComponent(TextView::class.java)
 
-        Assertions.assertThat(textView.toViewStructure()).isEqualTo(ViewStructure.View(TextView::class.java))
+        assertThat(textView.viewStructure).isEqualTo(ViewStructure.View(TextView::class.java))
     }
 
     @Test
     fun toViewStructure_LinearLayoutNoChildren() {
         val textView = createComponentGroup(LinearLayout::class.java, children = emptyList())
 
-        Assertions.assertThat(textView.toViewStructure()).isEqualTo(ViewStructure.ViewGroup(LinearLayout::class.java, children = emptyList()))
+        assertThat(textView.viewStructure).isEqualTo(ViewStructure.ViewGroup(LinearLayout::class.java, children = emptyList()))
     }
 
     @Test
@@ -28,7 +28,8 @@ class ViewStructureTest {
                 children = listOf(createComponent(TextView::class.java))
         )
 
-        Assertions.assertThat(textView.toViewStructure()).isEqualTo(ViewStructure.ViewGroup(LinearLayout::class.java, children = listOf(ViewStructure.View(TextView::class.java))))
+        assertThat(textView.viewStructure).isEqualTo(ViewStructure.ViewGroup(LinearLayout::class.java, children = listOf
+        (ViewStructure.View(TextView::class.java))))
     }
 
     @Test
@@ -41,7 +42,7 @@ class ViewStructureTest {
                 )
         )
 
-        Assertions.assertThat(textView.toViewStructure()).isEqualTo(
+        assertThat(textView.viewStructure).isEqualTo(
                 ViewStructure.ViewGroup(LinearLayout::class.java, children = listOf(
                         ViewStructure.View(TextView::class.java),
                         ViewStructure.ViewGroup(LinearLayout::class.java, children = emptyList())

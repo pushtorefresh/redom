@@ -11,14 +11,14 @@ sealed class ViewStructure {
     ) : ViewStructure()
 }
 
-fun <O : Any, V : Any> Component<O, V>.toViewStructure(): ViewStructure = when (this) {
+fun <O : Any, V : Any> toViewStructure(component: Component<O, V>): ViewStructure = when (component) {
     is ComponentGroup -> ViewStructure.ViewGroup(
-            clazz,
-            children = if (children.isEmpty()) {
+            component.clazz,
+            children = if (component.children.isEmpty()) {
                 emptyList()
             } else {
-                children.map { it.toViewStructure() }
+                component.children.map { toViewStructure(it) }
             }
     )
-    else -> ViewStructure.View(clazz)
+    else -> ViewStructure.View(component.clazz)
 }
