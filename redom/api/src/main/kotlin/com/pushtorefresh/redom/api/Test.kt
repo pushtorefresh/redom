@@ -45,7 +45,7 @@ private fun f() {
     render(dom)
 }
 
-fun <O : Any> render(dom: ComponentGroup<O, *>) : RenderResult<O> {
+private fun <O : Any> render(dom: List<Component<O, *>>) : RenderResult<O> {
     TODO()
 }
 

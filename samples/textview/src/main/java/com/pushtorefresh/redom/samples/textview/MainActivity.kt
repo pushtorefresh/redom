@@ -10,7 +10,7 @@ import com.pushtorefresh.redom.android.recycler.Adapter
 import com.pushtorefresh.redom.android.recycler.Inflater
 import com.pushtorefresh.redom.android.recycler.ViewTypeRegistryImpl
 import com.pushtorefresh.redom.api.LinearLayout
-import com.pushtorefresh.redom.api.LinearLayout.Orientation.*
+import com.pushtorefresh.redom.api.LinearLayout.Orientation.Horizontal
 import com.pushtorefresh.redom.api.TextView
 import io.reactivex.Observable
 
@@ -25,7 +25,7 @@ class MainActivity : AppCompatActivity() {
         recyclerView.layoutManager = LinearLayoutManager(this)
         findViewById<ViewGroup>(android.R.id.content).addView(recyclerView)
 
-        val dom = androidDom<UI> {
+        adapter.setComponents(androidDom<UI> {
             LinearLayout {
                 change {
                     orientation = Observable.just(Horizontal)
@@ -51,8 +51,7 @@ class MainActivity : AppCompatActivity() {
                     output += observe.clicks.doOnNext { println("Click observed $it") }.map { UI }
                 }
             }
-        }.build()
-        adapter.setComponents(dom.children)
+        }.build())
     }
 
     object UI
