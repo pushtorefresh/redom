@@ -2,19 +2,23 @@ package com.pushtorefresh.redom.android.view
 
 import com.jakewharton.rxbinding2.view.RxView
 import com.jakewharton.rxrelay2.PublishRelay
-import com.pushtorefresh.redom.api.*
+import com.pushtorefresh.redom.api.Component
+import com.pushtorefresh.redom.api.ComponentGroup
+import com.pushtorefresh.redom.api.LinearLayout
 import com.pushtorefresh.redom.api.LinearLayout.Orientation.Horizontal
 import com.pushtorefresh.redom.api.LinearLayout.Orientation.Vertical
+import com.pushtorefresh.redom.api.View
+import com.pushtorefresh.redom.api.ViewGroup
+import com.pushtorefresh.redom.api.ViewParent
+import com.pushtorefresh.redom.api.toViewStructure
 import io.reactivex.Observable
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.disposables.Disposable
 import io.reactivex.rxkotlin.plusAssign
-import io.reactivex.subjects.PublishSubject
 
 class LinearLayoutImpl<O : Any>(private val viewParent: ViewParent<O>) : LinearLayout<O> {
 
     private val outputObservables = mutableListOf<Observable<O>>()
-    private val rawOutput = PublishSubject.create<Any>()
     private val views = mutableListOf<View<O, *, *>>()
     private var observeClicks: PublishRelay<Any>? = null
     private var _orientation: Observable<LinearLayout.Orientation>? = null
@@ -50,8 +54,7 @@ class LinearLayoutImpl<O : Any>(private val viewParent: ViewParent<O>) : LinearL
         return LinearLayoutComponent(observeClicks,
                                      _orientation,
                                      children,
-                                     Observable.merge(outputObservables),
-                                     rawOutput
+                                     Observable.merge(outputObservables)
         )
     }
 }
@@ -59,11 +62,11 @@ class LinearLayoutImpl<O : Any>(private val viewParent: ViewParent<O>) : LinearL
 private class LinearLayoutComponent<O : Any>(private val observeClicks: PublishRelay<Any>?,
                                              private val orientation: Observable<LinearLayout.Orientation>?,
                                              override val children: List<Component<O, out Any>>,
-                                             override val output: Observable<O>,
-                                             override val rawOutput: Observable<*>) :
+                                             override val output: Observable<O>) :
         ComponentGroup<O, android.widget.LinearLayout> {
 
     override val clazz: Class<out ViewGroup<out Any, out ViewGroup.Observe, out ViewGroup.Change>> = LinearLayout::class.java
+    override val viewStructure = toViewStructure(this)
 
     override fun bind(view: android.widget.LinearLayout): Disposable {
         val disposable = CompositeDisposable()

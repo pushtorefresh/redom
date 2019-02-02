@@ -4,8 +4,8 @@ import com.pushtorefresh.redom.api.Component
 import com.pushtorefresh.redom.api.ComponentGroup
 import com.pushtorefresh.redom.api.View
 import com.pushtorefresh.redom.api.ViewGroup
+import com.pushtorefresh.redom.api.toViewStructure
 import io.reactivex.Observable
-import java.lang.IllegalArgumentException
 
 fun <T : View<*, *, *>> createComponent(clazz: Class<T>): Component<Any, Any> {
     if (ViewGroup::class.java.isAssignableFrom(clazz)) {
@@ -14,10 +14,8 @@ fun <T : View<*, *, *>> createComponent(clazz: Class<T>): Component<Any, Any> {
 
     return object : Component<Any, Any> {
         override val clazz: Class<out View<*, *, *>> = clazz
-
+        override val viewStructure = toViewStructure(this)
         override val output: Observable<Any>
-            get() = throw IllegalAccessError()
-        override val rawOutput: Observable<*>
             get() = throw IllegalAccessError()
 
         override fun bind(view: Any) = throw IllegalAccessError()
@@ -32,8 +30,7 @@ fun <T : ViewGroup<*, *, *>> createComponentGroup(clazz: Class<T>, children: Lis
 
         override val output: Observable<Any>
             get() = throw IllegalAccessError()
-        override val rawOutput: Observable<*>
-            get() = throw IllegalAccessError()
+        override val viewStructure = toViewStructure(this)
 
         override fun bind(view: Any) = throw IllegalAccessError()
     }

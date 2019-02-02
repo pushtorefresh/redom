@@ -6,7 +6,6 @@ import io.reactivex.disposables.Disposable
 interface Component<O: Any, V: Any> {
     val clazz: Class<out View<*, *, *>>
     val output: Observable<O>
-    val rawOutput: Observable<*>
-
+    val viewStructure: ViewStructure
     fun bind(view: V): Disposable
 }
