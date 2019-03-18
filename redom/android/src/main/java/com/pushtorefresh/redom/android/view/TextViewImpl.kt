@@ -4,33 +4,18 @@ import androidx.appcompat.widget.AppCompatTextView
 import com.jakewharton.rxbinding2.view.RxView
 import com.jakewharton.rxbinding2.widget.RxTextView
 import com.jakewharton.rxrelay2.PublishRelay
-import com.pushtorefresh.redom.api.Component
-import com.pushtorefresh.redom.api.TextView
-import com.pushtorefresh.redom.api.View
-import com.pushtorefresh.redom.api.toViewStructure
+import com.pushtorefresh.redom.api.*
 import io.reactivex.Observable
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.disposables.Disposable
 import io.reactivex.rxkotlin.plusAssign
 
-class TextViewImpl<O : Any> : TextView<O> {
+class TextViewImpl<O : Any> : TextView<O>, ViewImpl<O, TextView.Observe, TextView.Change>() {
 
-    private val outputObservables = mutableListOf<Observable<O>>()
-    private var observeClicks: PublishRelay<Any>? = null
     private var observeText: PublishRelay<CharSequence>? = null
     private var changeText: Observable<out CharSequence>? = null
 
-    override val observe = object : TextView.Observe {
-        override val textChanges: Observable<CharSequence>
-            get() = observeText ?: PublishRelay.create<CharSequence>().also {
-                observeText = it
-            }
-
-        override val clicks: Observable<Any>
-            get() = observeClicks ?: PublishRelay.create<Any>().also {
-                observeClicks = it
-            }
-    }
+    override val observe: TextView.Observe = TextViewObserveImpl()
 
     override val change = object : TextView.Change {
         override var text: Observable<out CharSequence>
@@ -40,12 +25,6 @@ class TextViewImpl<O : Any> : TextView<O> {
             }
     }
 
-    override val output = object : View.Output<O> {
-        override fun plusAssign(observable: Observable<O>) {
-            outputObservables += observable
-        }
-    }
-
     override fun build(): Component<O, *> {
         return TextViewComponent(observeClicks,
                                  observeText,
@@ -53,6 +32,13 @@ class TextViewImpl<O : Any> : TextView<O> {
                                  TextView::class.java,
                                  Observable.merge(outputObservables)
         )
+    }
+
+    private inner class TextViewObserveImpl : ViewObserveImpl(), TextView.Observe {
+        override val textChanges: Observable<out CharSequence>
+            get() = observeText ?: PublishRelay.create<CharSequence>().also {
+                observeText = it
+            }
     }
 }
 
