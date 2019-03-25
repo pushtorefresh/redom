@@ -4,16 +4,24 @@ import androidx.appcompat.widget.AppCompatTextView
 import com.jakewharton.rxbinding2.view.RxView
 import com.jakewharton.rxbinding2.widget.RxTextView
 import com.jakewharton.rxrelay2.PublishRelay
-import com.pushtorefresh.redom.api.*
+import com.pushtorefresh.redom.api.Component
+import com.pushtorefresh.redom.api.TextView
+import com.pushtorefresh.redom.api.View
+import com.pushtorefresh.redom.api.ViewImpl
+import com.pushtorefresh.redom.api.toViewStructure
 import io.reactivex.Observable
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.disposables.Disposable
 import io.reactivex.rxkotlin.plusAssign
 
-class TextViewImpl<O : Any> : TextView<O>, ViewImpl<O, TextView.Observe, TextView.Change>() {
+open class TextViewImpl<O : Any> : TextView<O>, ViewImpl<O, TextView.Observe, TextView.Change>() {
 
-    private var observeText: PublishRelay<CharSequence>? = null
-    private var changeText: Observable<out CharSequence>? = null
+    protected var observeText: PublishRelay<CharSequence>? = null
+        private set(value) {
+            field = value
+        }
+
+    protected var changeText: Observable<out CharSequence>? = null
 
     override val observe: TextView.Observe = TextViewObserveImpl()
 
