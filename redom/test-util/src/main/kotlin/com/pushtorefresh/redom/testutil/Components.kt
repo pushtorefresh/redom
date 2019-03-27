@@ -7,13 +7,13 @@ import com.pushtorefresh.redom.api.ViewGroup
 import com.pushtorefresh.redom.api.toViewStructure
 import io.reactivex.Observable
 
-fun <T : View<*, *, *>> createComponent(clazz: Class<T>): Component<Any, Any> {
+fun <T : View<*>> createComponent(clazz: Class<T>): Component<Any, Any> {
     if (ViewGroup::class.java.isAssignableFrom(clazz)) {
         throw IllegalArgumentException("createComponent can't be used with ViewGroup, use createComponentGroup")
     }
 
     return object : Component<Any, Any> {
-        override val clazz: Class<out View<*, *, *>> = clazz
+        override val clazz: Class<out View<*>> = clazz
         override val viewStructure = toViewStructure(this)
         override val output: Observable<Any>
             get() = throw IllegalAccessError()
@@ -22,9 +22,9 @@ fun <T : View<*, *, *>> createComponent(clazz: Class<T>): Component<Any, Any> {
     }
 }
 
-fun <T : ViewGroup<*, *, *>> createComponentGroup(clazz: Class<T>, children: List<Component<Any, Any>>): ComponentGroup<Any, Any> {
+fun <T : ViewGroup<*>> createComponentGroup(clazz: Class<T>, children: List<Component<Any, Any>>): ComponentGroup<Any, Any> {
     return object : ComponentGroup<Any, Any> {
-        override val clazz: Class<out ViewGroup<*, *, *>> = clazz
+        override val clazz: Class<out ViewGroup<*>> = clazz
 
         override val children: List<Component<Any, out Any>> = children
 
