@@ -3,7 +3,7 @@ package com.pushtorefresh.redom.api
 import com.pushtorefresh.redom.api.LinearLayout.Orientation.Vertical
 import io.reactivex.Observable
 
-private fun <O: Any> RecyclerDom(lambda: Dom<O>.() -> Unit): Dom<O> = TODO()
+private fun <O : Any> RecyclerDom(lambda: Dom<O>.() -> Unit): Dom<O> = TODO()
 
 private sealed class MyUiAction {
     object MyTextViewClick : MyUiAction()
@@ -14,27 +14,21 @@ private fun f() {
 
         TextView {
 
-            change.text = Observable.just("asd")
+            text = Observable.just("asd")
 
-            change {
-                text = Observable.just("yoba")
-            }
+            text = Observable.just("yoba")
 
-            output += observe.textChanges.map { MyUiAction.MyTextViewClick }
+            output += text.map { MyUiAction.MyTextViewClick }
 
-            observe {
-                output += clicks.map { MyUiAction.MyTextViewClick }
-                output += clicks.map { MyUiAction.MyTextViewClick }
-                output += clicks.map { MyUiAction.MyTextViewClick }
-                output += textChanges.map { MyUiAction.MyTextViewClick }
-            }
+            output += clicks.map { MyUiAction.MyTextViewClick }
+            output += clicks.map { MyUiAction.MyTextViewClick }
+            output += clicks.map { MyUiAction.MyTextViewClick }
+            output += text.map { MyUiAction.MyTextViewClick }
         }
 
         LinearLayout {
 
-            change {
-                orientation = Observable.just(Vertical)
-            }
+            orientation = Observable.just(Vertical)
 
             TextView {
                 // this call should go to LinearLayout
@@ -45,7 +39,7 @@ private fun f() {
     render(dom)
 }
 
-private fun <O : Any> render(dom: List<Component<O, *>>) : RenderResult<O> {
+private fun <O : Any> render(dom: List<Component<O, *>>): RenderResult<O> {
     TODO()
 }
 

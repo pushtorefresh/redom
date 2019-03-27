@@ -29,7 +29,7 @@ private class ButtonComponent<O : Any>(
     private val observeClicks: PublishRelay<Any>?,
     private val observeText: PublishRelay<CharSequence>?,
     private val changeText: Observable<out CharSequence>?,
-    override val clazz: Class<out View<*, *, *>>,
+    override val clazz: Class<out View<*>>,
     override val output: Observable<O>
 ) : Component<O, AppCompatButton> {
 
