@@ -2,6 +2,7 @@ package com.pushtorefresh.redom.samples.textview
 
 import android.os.Bundle
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -9,8 +10,9 @@ import com.pushtorefresh.redom.android.androidDom
 import com.pushtorefresh.redom.android.recycler.Adapter
 import com.pushtorefresh.redom.android.recycler.Inflater
 import com.pushtorefresh.redom.android.recycler.ViewTypeRegistryImpl
+import com.pushtorefresh.redom.api.Button
 import com.pushtorefresh.redom.api.LinearLayout
-import com.pushtorefresh.redom.api.LinearLayout.Orientation.Horizontal
+import com.pushtorefresh.redom.api.LinearLayout.Orientation.Vertical
 import com.pushtorefresh.redom.api.TextView
 import io.reactivex.Observable
 
@@ -27,28 +29,28 @@ class MainActivity : AppCompatActivity() {
 
         adapter.setComponents(androidDom<UI> {
             LinearLayout {
-                change {
-                    orientation = Observable.just(Horizontal)
+
+                orientation = Observable.just(Vertical)
+
+                TextView {
+                    text = Observable.just("1")
                 }
 
                 TextView {
-                    change {
-                        text = Observable.just("1")
-                    }
+                    text = Observable.just("2")
                 }
 
-                TextView {
-                    change {
-                        text = Observable.just("2")
-                    }
+                Button {
+                    text = Observable.just("Button")
+                    output += clicks.doOnNext { Toast.makeText(this@MainActivity, "Button", Toast.LENGTH_LONG).show() }.map { UI }
                 }
             }
 
             repeat(100) { index ->
                 TextView {
-                    change.text = Observable.just(index.toString())
-                    output += observe.textChanges.doOnNext { println("Text change observed $it") }.map { UI }
-                    output += observe.clicks.doOnNext { println("Click observed $it") }.map { UI }
+                    text = Observable.just(index.toString())
+                    output += text.doOnNext { println("Text change observed $it") }.map { UI }
+                    output += clicks.doOnNext { println("Click observed $it") }.map { UI }
                 }
             }
         }.build())

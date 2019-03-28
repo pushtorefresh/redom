@@ -2,11 +2,9 @@ package com.pushtorefresh.redom.api
 
 import io.reactivex.Observable
 
-interface LinearLayout<O : Any> : ViewGroup<O, View.Observe, LinearLayout.Change> {
+interface LinearLayout<O : Any> : ViewGroup<O> {
 
-    interface Change : View.Change {
-        var orientation: Observable<Orientation>
-    }
+    var orientation: Observable<Orientation>
 
     enum class Orientation {
         Vertical,

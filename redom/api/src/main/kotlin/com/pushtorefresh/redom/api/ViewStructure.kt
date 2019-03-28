@@ -2,11 +2,11 @@ package com.pushtorefresh.redom.api
 
 sealed class ViewStructure {
     data class View(
-            val clazz: Class<out com.pushtorefresh.redom.api.View<*, *, *>>
+            val clazz: Class<out com.pushtorefresh.redom.api.View<*>>
     ) : ViewStructure()
 
     data class ViewGroup(
-            val clazz: Class<out com.pushtorefresh.redom.api.ViewGroup<*, *, *>>,
+            val clazz: Class<out com.pushtorefresh.redom.api.ViewGroup<*>>,
             val children: List<ViewStructure>
     ) : ViewStructure()
 }
