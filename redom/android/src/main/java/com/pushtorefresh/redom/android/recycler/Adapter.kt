@@ -2,11 +2,15 @@ package com.pushtorefresh.redom.android.recycler
 
 import android.view.ViewGroup
 import androidx.appcompat.widget.AppCompatButton
+import androidx.appcompat.widget.AppCompatCheckBox
 import androidx.appcompat.widget.AppCompatTextView
+import androidx.appcompat.widget.SwitchCompat
 import androidx.recyclerview.widget.RecyclerView
 import com.pushtorefresh.redom.api.Button
+import com.pushtorefresh.redom.api.CheckBox
 import com.pushtorefresh.redom.api.Component
 import com.pushtorefresh.redom.api.LinearLayout
+import com.pushtorefresh.redom.api.Switch
 import com.pushtorefresh.redom.api.TextView
 import com.pushtorefresh.redom.api.ViewStructure
 
@@ -41,6 +45,8 @@ object Inflater : (ViewStructure, ViewGroup) -> android.view.View {
             is ViewStructure.View -> when (viewStructure.clazz) {
                 TextView::class.java -> AppCompatTextView(parent.context)
                 Button::class.java -> AppCompatButton(parent.context)
+                Switch::class.java -> SwitchCompat(parent.context)
+                CheckBox::class.java -> AppCompatCheckBox(parent.context)
                 else -> throw IllegalArgumentException("Inflating of ${viewStructure.clazz} is not supported yet")
             }
             is ViewStructure.ViewGroup -> when (viewStructure.clazz) {
