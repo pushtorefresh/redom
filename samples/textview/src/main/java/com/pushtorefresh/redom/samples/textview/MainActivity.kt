@@ -11,8 +11,10 @@ import com.pushtorefresh.redom.android.recycler.Adapter
 import com.pushtorefresh.redom.android.recycler.Inflater
 import com.pushtorefresh.redom.android.recycler.ViewTypeRegistryImpl
 import com.pushtorefresh.redom.api.Button
+import com.pushtorefresh.redom.api.CheckBox
 import com.pushtorefresh.redom.api.LinearLayout
 import com.pushtorefresh.redom.api.LinearLayout.Orientation.Vertical
+import com.pushtorefresh.redom.api.Switch
 import com.pushtorefresh.redom.api.TextView
 import io.reactivex.Observable
 
@@ -44,6 +46,15 @@ class MainActivity : AppCompatActivity() {
                     text = Observable.just("Button")
                     output += clicks.doOnNext { Toast.makeText(this@MainActivity, "Button", Toast.LENGTH_LONG).show() }.map { UI }
                 }
+
+                CheckBox {
+                    checked = Observable.just(true)
+                }
+
+                Switch {
+                    checked = Observable.just(false)
+                }
+
             }
 
             repeat(100) { index ->

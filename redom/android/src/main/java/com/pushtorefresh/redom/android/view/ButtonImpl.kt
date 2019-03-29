@@ -13,7 +13,7 @@ import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.disposables.Disposable
 import io.reactivex.rxkotlin.plusAssign
 
-class ButtonImpl<O : Any> : Button<O>, TextViewImpl<O>() {
+open class ButtonImpl<O : Any> : Button<O>, TextViewImpl<O>() {
     override fun build(): Component<O, out Any> {
         return ButtonComponent(
             observeClicks,
