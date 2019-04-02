@@ -10,12 +10,8 @@ import com.pushtorefresh.redom.android.androidDom
 import com.pushtorefresh.redom.android.recycler.Adapter
 import com.pushtorefresh.redom.android.recycler.Inflater
 import com.pushtorefresh.redom.android.recycler.ViewTypeRegistryImpl
-import com.pushtorefresh.redom.api.Button
-import com.pushtorefresh.redom.api.CheckBox
-import com.pushtorefresh.redom.api.LinearLayout
+import com.pushtorefresh.redom.api.*
 import com.pushtorefresh.redom.api.LinearLayout.Orientation.Vertical
-import com.pushtorefresh.redom.api.Switch
-import com.pushtorefresh.redom.api.TextView
 import io.reactivex.Observable
 
 class MainActivity : AppCompatActivity() {
@@ -55,6 +51,9 @@ class MainActivity : AppCompatActivity() {
                     checked = Observable.just(false)
                 }
 
+                EditText {
+                    text = Observable.just("Yooo, change me")
+                }
             }
 
             repeat(100) { index ->
