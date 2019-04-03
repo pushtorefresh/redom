@@ -42,6 +42,8 @@ class EditTextImpl<O : Any> : EditText<O>, TextViewImpl<O>() {
             observeText?.also { disposable += RxTextView.textChanges(view).subscribe(it) }
             changeText?.also { disposable += it.subscribe(RxTextView.text(view)) }
 
+            // TODO bind output.
+
             return disposable
         }
     }
