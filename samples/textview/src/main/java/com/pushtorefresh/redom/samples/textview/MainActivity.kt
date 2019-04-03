@@ -45,7 +45,9 @@ class MainActivity : AppCompatActivity() {
 
                 Button {
                     text = Observable.just("Button")
-                    output += clicks.doOnNext { Toast.makeText(this@MainActivity, "Button", Toast.LENGTH_LONG).show() }.map { UI }
+                    output += clicks
+                        .doOnNext { Toast.makeText(this@MainActivity, "Button", Toast.LENGTH_LONG).show() }
+                        .map { UI }
                 }
 
                 CheckBox {

@@ -43,5 +43,7 @@ private fun <O : Any> render(dom: List<Component<O, *>>): RenderResult<O> {
     TODO()
 }
 
-data class RenderResult<O>(val output: Observable<O>,
-                           val rawOutput: Observable<Any>)
+data class RenderResult<O>(
+    val output: Observable<O>,
+    val rawOutput: Observable<Any>
+)

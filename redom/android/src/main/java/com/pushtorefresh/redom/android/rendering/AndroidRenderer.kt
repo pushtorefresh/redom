@@ -21,10 +21,10 @@ import java.util.concurrent.ConcurrentLinkedQueue
  * to optimize resource consumption.
  */
 class AndroidRenderer(
-        private val choreographer: Choreographer = Choreographer.getInstance(),
-        private val computationScheduler: Scheduler = Schedulers.computation(),
-        private val buffer: RenderingBuffer<Change> = RenderingBufferImpl(),
-        private val mainThreadChecker: Callable<Boolean> = Callable { Looper.myLooper() == Looper.getMainLooper() }
+    private val choreographer: Choreographer = Choreographer.getInstance(),
+    private val computationScheduler: Scheduler = Schedulers.computation(),
+    private val buffer: RenderingBuffer<Change> = RenderingBufferImpl(),
+    private val mainThreadChecker: Callable<Boolean> = Callable { Looper.myLooper() == Looper.getMainLooper() }
 ) : Renderer {
 
     private val streamDisposables: MutableCollection<StreamDisposable> = ConcurrentLinkedQueue()
@@ -32,37 +32,37 @@ class AndroidRenderer(
 
     init {
         val frameSignal = Observable
-                .create<Unit> { emitter ->
-                    val frameCallback = object : Choreographer.FrameCallback {
-                        override fun doFrame(frameTimeNanos: Long) {
-                            emitter.onNext(Unit)
+            .create<Unit> { emitter ->
+                val frameCallback = object : Choreographer.FrameCallback {
+                    override fun doFrame(frameTimeNanos: Long) {
+                        emitter.onNext(Unit)
 
-                            // Async loop.
-                            choreographer.postFrameCallback(this)
+                        // Async loop.
+                        choreographer.postFrameCallback(this)
 
-                            // TODO: Detect foreground state and remove callback if app is in background?
-                            // Pros:
-                            //      - Redom won't do anything on its own while app is in background.
-                            // Cons:
-                            //      - Changes pushed to the Renderer will be buffered in memory
-                            //        which can lead to OOM in background.
-                            //        Android Framework normally renders UI in memory,
-                            //        effectively keeping only current state in memory.
-                        }
+                        // TODO: Detect foreground state and remove callback if app is in background?
+                        // Pros:
+                        //      - Redom won't do anything on its own while app is in background.
+                        // Cons:
+                        //      - Changes pushed to the Renderer will be buffered in memory
+                        //        which can lead to OOM in background.
+                        //        Android Framework normally renders UI in memory,
+                        //        effectively keeping only current state in memory.
                     }
-
-                    emitter.setCancellable { choreographer.removeFrameCallback(frameCallback) }
-
-                    // Start async rendering loop.
-                    choreographer.postFrameCallback(frameCallback)
                 }
+
+                emitter.setCancellable { choreographer.removeFrameCallback(frameCallback) }
+
+                // Start async rendering loop.
+                choreographer.postFrameCallback(frameCallback)
+            }
 
         disposable = frameSignal
-                .filter { !buffer.isEmpty() }
-                .map { buffer.getAndSwap() }
-                .subscribe { bufferToRender ->
-                    renderBuffer(bufferToRender)
-                }
+            .filter { !buffer.isEmpty() }
+            .map { buffer.getAndSwap() }
+            .subscribe { bufferToRender ->
+                renderBuffer(bufferToRender)
+            }
     }
 
     private fun renderBuffer(bufferToRender: Collection<Change>) {

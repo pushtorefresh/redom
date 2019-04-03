@@ -2,11 +2,9 @@
 
 package com.pushtorefresh.redom.util
 
-import com.pushtorefresh.redom.util.sharedDistinctUntilChanged
 import io.reactivex.Observable
 import io.reactivex.subjects.PublishSubject
 import org.junit.Test
-import java.lang.Exception
 import java.util.concurrent.atomic.AtomicReferenceArray
 
 class SharedDistinctUntilChangedTest {
@@ -16,10 +14,10 @@ class SharedDistinctUntilChangedTest {
         val state = AtomicReferenceArray<Any>(1)
 
         Observable
-                .fromArray("a", "b")
-                .sharedDistinctUntilChanged(state, 0)
-                .test()
-                .assertResult("a", "b")
+            .fromArray("a", "b")
+            .sharedDistinctUntilChanged(state, 0)
+            .test()
+            .assertResult("a", "b")
     }
 
     @Test
@@ -27,10 +25,10 @@ class SharedDistinctUntilChangedTest {
         val state = AtomicReferenceArray<Any>(1)
 
         Observable
-                .fromArray("a", "a")
-                .sharedDistinctUntilChanged(state, 0)
-                .test()
-                .assertResult("a")
+            .fromArray("a", "a")
+            .sharedDistinctUntilChanged(state, 0)
+            .test()
+            .assertResult("a")
     }
 
     @Test
@@ -38,22 +36,22 @@ class SharedDistinctUntilChangedTest {
         val state = AtomicReferenceArray<Any>(1)
 
         Observable
-                .just("a")
-                .sharedDistinctUntilChanged(state, 0)
-                .test()
-                .assertResult("a")
+            .just("a")
+            .sharedDistinctUntilChanged(state, 0)
+            .test()
+            .assertResult("a")
 
         Observable
-                .just("a")
-                .sharedDistinctUntilChanged(state, 0)
-                .test()
-                .assertResult()
+            .just("a")
+            .sharedDistinctUntilChanged(state, 0)
+            .test()
+            .assertResult()
 
         Observable
-                .just("b")
-                .sharedDistinctUntilChanged(state, 0)
-                .test()
-                .assertResult("b")
+            .just("b")
+            .sharedDistinctUntilChanged(state, 0)
+            .test()
+            .assertResult("b")
     }
 
     @Test
@@ -62,8 +60,8 @@ class SharedDistinctUntilChangedTest {
         val state = AtomicReferenceArray<Any>(1)
 
         val testObserver = upstream
-                .sharedDistinctUntilChanged(state, 0)
-                .test()
+            .sharedDistinctUntilChanged(state, 0)
+            .test()
 
         testObserver.assertNotTerminated()
 
@@ -77,8 +75,8 @@ class SharedDistinctUntilChangedTest {
         val state = AtomicReferenceArray<Any>(1)
 
         val testObserver = upstream
-                .sharedDistinctUntilChanged(state, 0)
-                .test()
+            .sharedDistinctUntilChanged(state, 0)
+            .test()
 
         testObserver.assertNotTerminated()
 

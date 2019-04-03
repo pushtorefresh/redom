@@ -2,9 +2,14 @@
 
 package com.pushtorefresh.redom.android.rendering
 
+import com.nhaarman.mockito_kotlin.mock
+import com.nhaarman.mockito_kotlin.never
+import com.nhaarman.mockito_kotlin.verify
+import com.nhaarman.mockito_kotlin.verifyNoMoreInteractions
+import com.nhaarman.mockito_kotlin.verifyZeroInteractions
+import com.nhaarman.mockito_kotlin.whenever
 import com.pushtorefresh.redom.api.rendering.Change
 import com.pushtorefresh.redom.api.rendering.Renderer
-import com.nhaarman.mockito_kotlin.*
 import io.reactivex.Observable
 import io.reactivex.schedulers.TestScheduler
 import io.reactivex.subjects.PublishSubject
@@ -20,10 +25,10 @@ class AndroidRendererTest {
     private val timeScheduler = TestScheduler()
     private val mainThreadChecker = mock<Callable<Boolean>>()
     private val renderer: Renderer = AndroidRenderer(
-            choreographer.choreographer,
-            timeScheduler,
-            RenderingBufferImpl(),
-            mainThreadChecker
+        choreographer.choreographer,
+        timeScheduler,
+        RenderingBufferImpl(),
+        mainThreadChecker
     )
     private val changes = listOf<Change>(mock(), mock(), mock(), mock())
 
