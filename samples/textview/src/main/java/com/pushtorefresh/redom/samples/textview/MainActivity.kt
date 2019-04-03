@@ -12,6 +12,7 @@ import com.pushtorefresh.redom.android.recycler.Inflater
 import com.pushtorefresh.redom.android.recycler.ViewTypeRegistryImpl
 import com.pushtorefresh.redom.api.Button
 import com.pushtorefresh.redom.api.CheckBox
+import com.pushtorefresh.redom.api.EditText
 import com.pushtorefresh.redom.api.LinearLayout
 import com.pushtorefresh.redom.api.LinearLayout.Orientation.Vertical
 import com.pushtorefresh.redom.api.Switch
@@ -55,6 +56,9 @@ class MainActivity : AppCompatActivity() {
                     checked = Observable.just(false)
                 }
 
+                EditText {
+                    text = Observable.just("Yooo, change me")
+                }
             }
 
             repeat(100) { index ->
