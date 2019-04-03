@@ -38,9 +38,9 @@ class EditTextImpl<O : Any> : EditText<O>, TextViewImpl<O>() {
         override fun bind(view: AppCompatEditText): Disposable {
             val disposable = CompositeDisposable()
 
-            observeClicks?.also { disposable += RxView.clicks(view).subscribe(it) }
-            observeText?.also { disposable += RxTextView.textChanges(view).subscribe(it) }
-            changeText?.also { disposable += it.subscribe(RxTextView.text(view)) }
+            if (observeClicks != null) disposable += RxView.clicks(view).subscribe(observeClicks)
+            if (observeText != null) disposable += RxTextView.textChanges(view).subscribe(observeText)
+            if (changeText != null) disposable += changeText.subscribe(RxTextView.text(view))
 
             // TODO bind output.
 
