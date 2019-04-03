@@ -28,6 +28,7 @@ local.properties
 
 # Idea IDE files
 *.iml
-.idea/
+.idea/*
+!.idea/codeStyles/
 
 *.DS_STORE
