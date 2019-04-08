@@ -43,11 +43,14 @@ class ViewTypeRegistryImplTest {
     fun viewTypeOf_TextViewAndLinearLayoutWithChildren() {
         val viewTypeRegistry = ViewTypeRegistryImpl()
         val viewType1 = viewTypeRegistry.viewTypeOf(createComponent(TextView::class.java))
-        val viewType2 = viewTypeRegistry.viewTypeOf(createComponentGroup(LinearLayout::class.java,
+        val viewType2 = viewTypeRegistry.viewTypeOf(
+            createComponentGroup(
+                LinearLayout::class.java,
                 children = listOf(
-                        createComponent(TextView::class.java),
-                        createComponent(TextView::class.java)
-                ))
+                    createComponent(TextView::class.java),
+                    createComponent(TextView::class.java)
+                )
+            )
         )
 
         assertThat(viewType1).isEqualTo(0)
@@ -58,11 +61,13 @@ class ViewTypeRegistryImplTest {
     fun viewTypeOf_TextViewAndLinearLayoutWithChildrenSame() {
         val viewTypeRegistry = ViewTypeRegistryImpl()
         val viewType1 = viewTypeRegistry.viewTypeOf(createComponent(TextView::class.java))
-        val componentGroup = createComponentGroup(LinearLayout::class.java,
-                children = listOf(
-                        createComponent(TextView::class.java),
-                        createComponent(TextView::class.java)
-                ))
+        val componentGroup = createComponentGroup(
+            LinearLayout::class.java,
+            children = listOf(
+                createComponent(TextView::class.java),
+                createComponent(TextView::class.java)
+            )
+        )
         val viewType2 = viewTypeRegistry.viewTypeOf(componentGroup)
         val viewType3 = viewTypeRegistry.viewTypeOf(componentGroup)
 
@@ -75,16 +80,22 @@ class ViewTypeRegistryImplTest {
     fun viewTypeOf_TextViewAndLinearLayoutWithDifferentChildren() {
         val viewTypeRegistry = ViewTypeRegistryImpl()
         val viewType1 = viewTypeRegistry.viewTypeOf(createComponent(TextView::class.java))
-        val viewType2 = viewTypeRegistry.viewTypeOf(createComponentGroup(LinearLayout::class.java,
+        val viewType2 = viewTypeRegistry.viewTypeOf(
+            createComponentGroup(
+                LinearLayout::class.java,
                 children = listOf(
-                        createComponent(TextView::class.java),
-                        createComponent(TextView::class.java)
-                ))
+                    createComponent(TextView::class.java),
+                    createComponent(TextView::class.java)
+                )
+            )
         )
-        val viewType3 = viewTypeRegistry.viewTypeOf(createComponentGroup(LinearLayout::class.java,
+        val viewType3 = viewTypeRegistry.viewTypeOf(
+            createComponentGroup(
+                LinearLayout::class.java,
                 children = listOf(
-                        createComponent(TextView::class.java)
-                ))
+                    createComponent(TextView::class.java)
+                )
+            )
         )
 
         assertThat(viewType1).isEqualTo(0)

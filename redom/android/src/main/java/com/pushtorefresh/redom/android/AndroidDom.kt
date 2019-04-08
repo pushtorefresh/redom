@@ -11,10 +11,10 @@ internal class AndroidDom<O : Any>(private val viewParent: ViewParent<O>) : Dom<
     private val views = mutableListOf<View<O>>()
 
     override fun <V : View<O>> createView(clazz: Class<out V>): V =
-            viewParent.createView(clazz).also { views += it }
+        viewParent.createView(clazz).also { views += it }
 
     override fun build(): List<Component<O, *>> =
-            views.map(View<O>::build)
+        views.map(View<O>::build)
 
 }
 

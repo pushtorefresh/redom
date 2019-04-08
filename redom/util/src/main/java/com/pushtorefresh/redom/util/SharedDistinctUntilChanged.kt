@@ -17,16 +17,19 @@ import java.util.concurrent.atomic.AtomicReferenceArray
  * @param sharedState atomic reference array that is used as source of current state when comparison happens.
  * @param stateIndex index of the item in the array that needs to be used to get current state when comparison happens.
  */
-fun <T> Observable<T>.sharedDistinctUntilChanged(sharedState: AtomicReferenceArray<Any>, stateIndex: Int): Observable<T> = RxJavaPlugins
-        .onAssembly(ObservableSharedDistinctUntilChanged(this, sharedState, stateIndex))
+fun <T> Observable<T>.sharedDistinctUntilChanged(
+    sharedState: AtomicReferenceArray<Any>,
+    stateIndex: Int
+): Observable<T> = RxJavaPlugins
+    .onAssembly(ObservableSharedDistinctUntilChanged(this, sharedState, stateIndex))
 
 // Operator fusion is not implemented for several reasons:
 // - Required interfaces are internal in RxJava.
 // - For Observable, it matters only for queue sharing which we don't have in Redom flows.
 internal class ObservableSharedDistinctUntilChanged<T>(
-        private val source: ObservableSource<T>,
-        private val sharedState: AtomicReferenceArray<Any>,
-        private val stateIndex: Int
+    private val source: ObservableSource<T>,
+    private val sharedState: AtomicReferenceArray<Any>,
+    private val stateIndex: Int
 ) : Observable<T>() {
 
     override fun subscribeActual(actual: Observer<in T>) {
@@ -34,9 +37,9 @@ internal class ObservableSharedDistinctUntilChanged<T>(
     }
 
     class SharedDistinctUntilChangedObserver<T>(
-            private val actual: Observer<in T>,
-            private val sharedState: AtomicReferenceArray<Any>,
-            private val stateIndex: Int
+        private val actual: Observer<in T>,
+        private val sharedState: AtomicReferenceArray<Any>,
+        private val stateIndex: Int
     ) : Observer<T>, Disposable {
 
         private var upstream: Disposable? = null

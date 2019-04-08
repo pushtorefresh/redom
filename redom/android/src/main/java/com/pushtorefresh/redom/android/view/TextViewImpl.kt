@@ -32,26 +32,29 @@ open class TextViewImpl<O : Any> : TextView<O>, ViewImpl<O>() {
         }
 
     override fun build(): Component<O, *> {
-        return TextViewComponent(observeClicks,
-                                 observeText,
-                                 changeText,
-                                 TextView::class.java,
-                                 Observable.merge(outputObservables)
+        return TextViewComponent(
+            observeClicks,
+            observeText,
+            changeText,
+            TextView::class.java,
+            Observable.merge(outputObservables)
         )
     }
 }
 
-private class TextViewComponent<O : Any>(private val observeClicks: PublishRelay<Any>?,
-                                   private val observeText: PublishRelay<CharSequence>?,
-                                   private val changeText: Observable<out CharSequence>?,
-                                   override val clazz: Class<out View<*>>,
-                                   override val output: Observable<O>) : Component<O, AppCompatTextView> {
+private class TextViewComponent<O : Any>(
+    private val observeClicks: PublishRelay<Any>?,
+    private val observeText: PublishRelay<CharSequence>?,
+    private val changeText: Observable<out CharSequence>?,
+    override val clazz: Class<out View<*>>,
+    override val output: Observable<O>
+) : Component<O, AppCompatTextView> {
     override val viewStructure = toViewStructure(this)
     override fun bind(view: AppCompatTextView): Disposable {
         val disposable = CompositeDisposable()
-        if(observeClicks != null) disposable += RxView.clicks(view).subscribe(observeClicks)
-        if(observeText != null) disposable += RxTextView.textChanges(view).subscribe(observeText)
-        if(changeText != null) disposable += changeText.subscribe(RxTextView.text(view))
+        if (observeClicks != null) disposable += RxView.clicks(view).subscribe(observeClicks)
+        if (observeText != null) disposable += RxTextView.textChanges(view).subscribe(observeText)
+        if (changeText != null) disposable += changeText.subscribe(RxTextView.text(view))
         return disposable
     }
 }

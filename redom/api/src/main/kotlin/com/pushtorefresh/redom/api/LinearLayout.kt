@@ -12,4 +12,5 @@ interface LinearLayout<O : Any> : ViewGroup<O> {
     }
 }
 
-fun <O: Any> ViewParent<O>.LinearLayout(lambda: LinearLayout<O>.() -> Unit): Unit = lambda(createView(LinearLayout::class.java as Class<LinearLayout<O>>))
+fun <O : Any> ViewParent<O>.LinearLayout(lambda: LinearLayout<O>.() -> Unit): Unit =
+    lambda(createView(LinearLayout::class.java as Class<LinearLayout<O>>))

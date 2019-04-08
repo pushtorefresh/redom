@@ -10,6 +10,7 @@ interface View<O : Any> {
     interface Output<T> {
         operator fun plusAssign(observable: Observable<T>)
     }
+
     val clicks: Observable<Any>
     val output: Output<O>
 

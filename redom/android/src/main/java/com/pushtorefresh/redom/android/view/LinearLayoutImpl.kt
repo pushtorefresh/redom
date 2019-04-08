@@ -35,19 +35,21 @@ class LinearLayoutImpl<O : Any>(private val viewParent: ViewParent<O>) : LinearL
     override fun build(): ComponentGroup<O, out Any> {
         val children = views.map { it.build() }
 
-        return LinearLayoutComponent(observeClicks,
-                                     _orientation,
-                                     children,
-                                     Observable.merge(outputObservables)
+        return LinearLayoutComponent(
+            observeClicks,
+            _orientation,
+            children,
+            Observable.merge(outputObservables)
         )
     }
 }
 
-private class LinearLayoutComponent<O : Any>(private val observeClicks: PublishRelay<Any>?,
-                                             private val orientation: Observable<LinearLayout.Orientation>?,
-                                             override val children: List<Component<O, out Any>>,
-                                             override val output: Observable<O>) :
-        ComponentGroup<O, android.widget.LinearLayout> {
+private class LinearLayoutComponent<O : Any>(
+    private val observeClicks: PublishRelay<Any>?,
+    private val orientation: Observable<LinearLayout.Orientation>?,
+    override val children: List<Component<O, out Any>>,
+    override val output: Observable<O>
+) : ComponentGroup<O, android.widget.LinearLayout> {
 
     override val clazz: Class<out ViewGroup<out Any>> = LinearLayout::class.java
     override val viewStructure = toViewStructure(this)
@@ -55,7 +57,7 @@ private class LinearLayoutComponent<O : Any>(private val observeClicks: PublishR
     override fun bind(view: android.widget.LinearLayout): Disposable {
         val disposable = CompositeDisposable()
         if (observeClicks != null) disposable += RxView.clicks(view)
-                .subscribe(observeClicks)
+            .subscribe(observeClicks)
         if (orientation != null) disposable += orientation.subscribe {
             @Suppress("WHEN_ENUM_CAN_BE_NULL_IN_JAVA")
             view.orientation = when (it) {

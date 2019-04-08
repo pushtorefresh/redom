@@ -18,7 +18,7 @@ class ViewTypeRegistryImpl : ViewTypeRegistry {
     }
 
     override fun viewTreeOf(viewType: Int): ViewStructure = registry
-            .entries
-            .first { (_, value) -> value == viewType }
-            .key
+        .entries
+        .first { (_, value) -> value == viewType }
+        .key
 }

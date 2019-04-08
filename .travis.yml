@@ -3,30 +3,30 @@
 language: android
 android:
   components:
-    - build-tools-28.0.3
-    - android-28
-    - android-27
-    - android-16
-    - tools
-    - platform-tools
+  - build-tools-28.0.3
+  - android-28
+  - android-27
+  - android-16
+  - tools
+  - platform-tools
 
 jdk:
-  - oraclejdk8
+- oraclejdk8
 
 # Prevent Travis from running automatic project install.
 install:
-  - echo "Travis install step is noop"
+- echo "Travis install step is noop"
 
 script:
-  - ci/build.sh
+- ci/build.sh
 
 before_cache:
-  - rm -f "$HOME"/.gradle/caches/modules-2/modules-2.lock
+- rm -f "$HOME"/.gradle/caches/modules-2/modules-2.lock
 
 cache:
   directories:
-    - $HOME/.gradle/caches
-    - $HOME/.gradle/wrapper
+  - $HOME/.gradle/caches
+  - $HOME/.gradle/wrapper
 
 notifications:
   email: false

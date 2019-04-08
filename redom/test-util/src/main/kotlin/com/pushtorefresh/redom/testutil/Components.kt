@@ -22,7 +22,10 @@ fun <T : View<*>> createComponent(clazz: Class<T>): Component<Any, Any> {
     }
 }
 
-fun <T : ViewGroup<*>> createComponentGroup(clazz: Class<T>, children: List<Component<Any, Any>>): ComponentGroup<Any, Any> {
+fun <T : ViewGroup<*>> createComponentGroup(
+    clazz: Class<T>,
+    children: List<Component<Any, Any>>
+): ComponentGroup<Any, Any> {
     return object : ComponentGroup<Any, Any> {
         override val clazz: Class<out ViewGroup<*>> = clazz
 
