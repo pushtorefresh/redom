@@ -2,11 +2,9 @@
 
 package com.pushtorefresh.redom.api
 
-import io.reactivex.Observable
-
 @Dom.RootDsl
 interface TextView<O : Any> : View<O> {
-    var rxText: Observable<out CharSequence>
+    var text: String
 }
 
 fun <O : Any> ViewParent<O>.TextView(lambda: TextView<O>.() -> Unit): Unit =

@@ -17,7 +17,8 @@ import com.pushtorefresh.redom.api.LinearLayout
 import com.pushtorefresh.redom.api.LinearLayout.Orientation.Vertical
 import com.pushtorefresh.redom.api.Switch
 import com.pushtorefresh.redom.api.TextView
-import io.reactivex.Observable
+import com.pushtorefresh.redom.api.TextViewEvent
+import com.pushtorefresh.redom.api.ViewEvent
 
 class MainActivity : AppCompatActivity() {
 
@@ -33,41 +34,54 @@ class MainActivity : AppCompatActivity() {
         adapter.setComponents(androidDom<UI> {
             LinearLayout {
 
-                rxOrientation = Observable.just(Vertical)
+                orientation = Vertical
 
                 TextView {
-                    rxText = Observable.just("1")
+                    text = "hello"
+
+                    events = {
+                        when (it) {
+                            is ViewEvent.Click -> println(it)
+                        }
+                    }
                 }
 
                 TextView {
-                    rxText = Observable.just("2")
+                    text = "2"
                 }
 
                 Button {
-                    rxText = Observable.just("Button")
-                    output += rxClicks
-                        .doOnNext { Toast.makeText(this@MainActivity, "Button", Toast.LENGTH_LONG).show() }
-                        .map { UI }
+                    text = "Button"
+
+                    events = {
+                        when (it) {
+                            is ViewEvent.Click -> Toast.makeText(this@MainActivity, "Button", Toast.LENGTH_LONG).show()
+                        }
+                    }
                 }
 
                 CheckBox {
-                    rxChecked = Observable.just(true)
+                    checked = true
                 }
 
                 Switch {
-                    rxChecked = Observable.just(false)
+                    checked = false
                 }
 
                 EditText {
-                    rxText = Observable.just("Yooo, change me")
+                    text = "Yooo, change me"
                 }
             }
 
             repeat(100) { index ->
                 TextView {
-                    rxText = Observable.just(index.toString())
-                    output += rxText.doOnNext { println("Text change observed $it") }.map { UI }
-                    output += rxClicks.doOnNext { println("Click observed $it") }.map { UI }
+                    text = index.toString()
+                    events = {
+                        when (it) {
+                            is TextViewEvent.TextChange -> println("Text change observed $it")
+                            is ViewEvent.Click -> println("Click observed $it")
+                        }
+                    }
                 }
             }
         }.build())

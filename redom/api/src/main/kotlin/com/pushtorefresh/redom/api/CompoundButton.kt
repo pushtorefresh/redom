@@ -1,12 +1,7 @@
 package com.pushtorefresh.redom.api
 
-import io.reactivex.Observable
-
 interface CompoundButton<O : Any> : Button<O> {
-
-    var rxChecked: Observable<Boolean>
-
-    fun rxToggle(toggle: Observable<Any>)
+    var checked: Boolean
 }
 
 interface Switch<O : Any> : CompoundButton<O>

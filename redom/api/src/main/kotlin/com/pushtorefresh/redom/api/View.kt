@@ -11,7 +11,7 @@ interface View<O : Any> {
         operator fun plusAssign(observable: Observable<T>)
     }
 
-    val rxClicks: Observable<Any>
+    var events: (ViewEvent) -> Unit
     val output: Output<O>
 
     fun build(): Component<O, out Any>
@@ -30,9 +30,4 @@ abstract class ViewImpl<O : Any> : View<O> {
             outputObservables += observable
         }
     }
-
-    override val rxClicks: Observable<Any>
-        get() = observeClicks ?: PublishRelay.create<Any>().also {
-            observeClicks = it
-        }
 }
