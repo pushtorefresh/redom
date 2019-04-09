@@ -33,41 +33,41 @@ class MainActivity : AppCompatActivity() {
         adapter.setComponents(androidDom<UI> {
             LinearLayout {
 
-                orientation = Observable.just(Vertical)
+                rxOrientation = Observable.just(Vertical)
 
                 TextView {
-                    text = Observable.just("1")
+                    rxText = Observable.just("1")
                 }
 
                 TextView {
-                    text = Observable.just("2")
+                    rxText = Observable.just("2")
                 }
 
                 Button {
-                    text = Observable.just("Button")
-                    output += clicks
+                    rxText = Observable.just("Button")
+                    output += rxClicks
                         .doOnNext { Toast.makeText(this@MainActivity, "Button", Toast.LENGTH_LONG).show() }
                         .map { UI }
                 }
 
                 CheckBox {
-                    checked = Observable.just(true)
+                    rxChecked = Observable.just(true)
                 }
 
                 Switch {
-                    checked = Observable.just(false)
+                    rxChecked = Observable.just(false)
                 }
 
                 EditText {
-                    text = Observable.just("Yooo, change me")
+                    rxText = Observable.just("Yooo, change me")
                 }
             }
 
             repeat(100) { index ->
                 TextView {
-                    text = Observable.just(index.toString())
-                    output += text.doOnNext { println("Text change observed $it") }.map { UI }
-                    output += clicks.doOnNext { println("Click observed $it") }.map { UI }
+                    rxText = Observable.just(index.toString())
+                    output += rxText.doOnNext { println("Text change observed $it") }.map { UI }
+                    output += rxClicks.doOnNext { println("Click observed $it") }.map { UI }
                 }
             }
         }.build())

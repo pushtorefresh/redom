@@ -6,7 +6,7 @@ import io.reactivex.Observable
 
 @Dom.RootDsl
 interface TextView<O : Any> : View<O> {
-    var text: Observable<out CharSequence>
+    var rxText: Observable<out CharSequence>
 }
 
 fun <O : Any> ViewParent<O>.TextView(lambda: TextView<O>.() -> Unit): Unit =

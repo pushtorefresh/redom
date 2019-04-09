@@ -14,21 +14,21 @@ private fun f() {
 
         TextView {
 
-            text = Observable.just("asd")
+            rxText = Observable.just("asd")
 
-            text = Observable.just("yoba")
+            rxText = Observable.just("yoba")
 
-            output += text.map { MyUiAction.MyTextViewClick }
+            output += rxText.map { MyUiAction.MyTextViewClick }
 
-            output += clicks.map { MyUiAction.MyTextViewClick }
-            output += clicks.map { MyUiAction.MyTextViewClick }
-            output += clicks.map { MyUiAction.MyTextViewClick }
-            output += text.map { MyUiAction.MyTextViewClick }
+            output += rxClicks.map { MyUiAction.MyTextViewClick }
+            output += rxClicks.map { MyUiAction.MyTextViewClick }
+            output += rxClicks.map { MyUiAction.MyTextViewClick }
+            output += rxText.map { MyUiAction.MyTextViewClick }
         }
 
         LinearLayout {
 
-            orientation = Observable.just(Vertical)
+            rxOrientation = Observable.just(Vertical)
 
             TextView {
                 // this call should go to LinearLayout

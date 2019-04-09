@@ -23,7 +23,7 @@ open class TextViewImpl<O : Any> : TextView<O>, ViewImpl<O>() {
 
     protected var changeText: Observable<out CharSequence>? = null
 
-    override var text: Observable<out CharSequence>
+    override var rxText: Observable<out CharSequence>
         get() = observeText ?: PublishRelay.create<CharSequence>().apply {
             observeText = this
         }

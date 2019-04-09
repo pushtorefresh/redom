@@ -20,7 +20,7 @@ abstract class CompundButtonImpl<O : Any> : ButtonImpl<O>(), CompoundButton<O> {
     protected var changeChecked: Observable<Boolean>? = null
     protected var observeChecked: PublishRelay<Boolean>? = null
 
-    override var checked: Observable<Boolean>
+    override var rxChecked: Observable<Boolean>
         get() = observeChecked ?: PublishRelay.create<Boolean>().apply {
             observeChecked = this
         }
@@ -28,7 +28,7 @@ abstract class CompundButtonImpl<O : Any> : ButtonImpl<O>(), CompoundButton<O> {
             changeChecked = value
         }
 
-    override fun toggle(toggle: Observable<Any>) {
+    override fun rxToggle(toggle: Observable<Any>) {
         this.toggle = toggle
     }
 

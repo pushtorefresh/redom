@@ -4,9 +4,9 @@ import io.reactivex.Observable
 
 interface CompoundButton<O : Any> : Button<O> {
 
-    var checked: Observable<Boolean>
+    var rxChecked: Observable<Boolean>
 
-    fun toggle(toggle: Observable<Any>)
+    fun rxToggle(toggle: Observable<Any>)
 }
 
 interface Switch<O : Any> : CompoundButton<O>

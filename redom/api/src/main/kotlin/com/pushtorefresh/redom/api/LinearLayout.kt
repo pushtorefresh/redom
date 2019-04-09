@@ -4,7 +4,7 @@ import io.reactivex.Observable
 
 interface LinearLayout<O : Any> : ViewGroup<O> {
 
-    var orientation: Observable<Orientation>
+    var rxOrientation: Observable<Orientation>
 
     enum class Orientation {
         Vertical,

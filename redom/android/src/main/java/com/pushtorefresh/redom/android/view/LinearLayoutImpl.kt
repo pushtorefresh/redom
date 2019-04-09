@@ -22,7 +22,7 @@ class LinearLayoutImpl<O : Any>(private val viewParent: ViewParent<O>) : LinearL
     private val views = mutableListOf<View<O>>()
     private var _orientation: Observable<LinearLayout.Orientation>? = null
 
-    override var orientation: Observable<LinearLayout.Orientation>
+    override var rxOrientation: Observable<LinearLayout.Orientation>
         get() = throw IllegalAccessError()
         set(value) {
             _orientation = value
