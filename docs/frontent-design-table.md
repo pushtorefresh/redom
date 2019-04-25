@@ -1,9 +1,7 @@
-# Redom Frontend Design Table
-
-| Feature                      | Reactive                                                     | Non-reactive                                                 |
-|------------------------------|--------------------------------------------------------------|--------------------------------------------------------------|
-| Android Framework Dependency | Soft dependency, custom types                                | Soft dependency, custom types                                |
-| Multi-threading Support      | DOM can be constructed, changed and rendered from any thread | DOM can be constructed, changed and rendered from any thread |
-| State Save/Restore           | -                                                            | -                                                            |
-| Observing Changes            |                                                              |                                                              |
-| DSL Lifecycle                |                                                              |                                                              |
+| Feature                      | Reactive                                                       | Non-reactive                                                                                                                                                                |
+|------------------------------|----------------------------------------------------------------|-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| Android Framework Dependency | Soft dependency, custom types                                  | Soft dependency, custom types                                                                                                                                               |
+| Multi-threading Support      | DOM can be constructed, changed and rendered from any thread   | DOM can be constructed, changed and rendered from any thread                                                                                                                |
+| State Save/Restore           | -                                                              | -                                                                                                                                                                           |
+| Observing Changes            | DSL exposes Reactive Observe API                               | DSL exposes listeners-based Observe API                                                                                                                                     |
+| Applying Changes             | DOM observes Observable values without need for DSL recreation | DOM does not observe changes to DSL made after rendering, new DSL needs to be applied. Low level components API might be exposed to find and change already rendered views. |
