@@ -33,25 +33,23 @@ class SignInAndroidView(root: ViewGroup) : SignInView {
 
     override val actions: Observable<Action> = PublishRelay.create()
 
-    override fun render(state: Observable<State>): Disposable = state
+    override fun render(stateStream: Observable<State>): Disposable = stateStream
         .observeOn(mainThread())
         .subscribe { state ->
             adapter.setComponents(androidDom<Unit> {
                 LinearLayout {
                     EditText {
-                        textChanges {
-                            
+                        text.subscribe {
+                            //actions.accept(it)
                         }
                     }
 
                     EditText {
-                       textChanges {
-
-                       }
+                       // actions.accept(it)
                     }
 
                     Button {
-                        text = "Sign In"
+                        text = Observable.just("Sign In")
                     }
 
                     TextView {
@@ -59,8 +57,9 @@ class SignInAndroidView(root: ViewGroup) : SignInView {
                             is State.Idle -> ""
                             is State.SigningIn -> "Signing in…"
                             is State.SignInSuccessful -> "Successfully signed in!"
-                            is State.SignInFailed -> "Couldn't sign in because ${it.cause.message}"
+                            is State.SignInFailed -> "Couldn't sign in because ${state.cause.message}"
                         }
+                            .let { Observable.just(it) }
                     }
                 }
             }.build())

@@ -7,5 +7,5 @@ import io.reactivex.disposables.Disposable
 
 interface SignInView {
     val actions: Observable<Action>
-    fun render(state: Observable<State>): Disposable
+    fun render(stateStream: Observable<State>): Disposable
 }
