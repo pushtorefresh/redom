@@ -1,5 +1,5 @@
-apply plugin: 'com.android.application'
-apply plugin: 'kotlin-android'
+apply plugin: "com.android.application"
+apply plugin: "kotlin-android"
 
 android {
     defaultConfig {
@@ -12,4 +12,8 @@ android {
 dependencies {
     implementation project(":redom:android")
     implementation androidXLibraries.appCompat
+    implementation sampleLibraries.rxRedux
+    implementation libraries.rxKotlin
+    implementation libraries.rxReplayingShareKotlin
+    implementation libraries.rxAndroid
 }
