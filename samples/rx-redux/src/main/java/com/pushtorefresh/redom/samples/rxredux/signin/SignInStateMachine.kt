@@ -27,6 +27,8 @@ class SignInStateMachine(
         abstract val password: CharSequence
         abstract val signInButtonEnabled: Boolean
 
+        // TODO extract state text
+
         data class Idle(
             override val email: CharSequence,
             override val password: CharSequence,
@@ -53,15 +55,6 @@ class SignInStateMachine(
         ) : State()
     }
 
-
-    val state: Observable<State> = inputActions
-        .observeOn(computationScheduler)
-        .reduxStore(
-            initialState = State.Idle(email = "", password = "", signInButtonEnabled = false),
-            sideEffects = listOf(::signInSideEffect),
-            reducer = ::reducer
-        )
-        .distinctUntilChanged()
 
     private fun reducer(state: State, action: Action): State = when (action) {
         is Action.ChangeEmail -> {
@@ -105,6 +98,18 @@ class SignInStateMachine(
             signInButtonEnabled = true
         )
     }
+
+    val state: Observable<State> = inputActions
+        .observeOn(computationScheduler)
+        .distinctUntilChanged()
+        .doOnNext { println("~~~ action = $it") }
+        .reduxStore(
+            initialState = State.Idle(email = "", password = "", signInButtonEnabled = false),
+            sideEffects = listOf(::signInSideEffect),
+            reducer = ::reducer
+        )
+        .distinctUntilChanged()
+        .doOnNext { println("~~~ state = $it") }
 
     private fun validateEmailAndPassword(email: CharSequence, password: CharSequence): Boolean = email.isNotEmpty() && password.isNotEmpty()
 

@@ -33,6 +33,7 @@ open class TextViewImpl<O : Any> : TextView<O>, ViewImpl<O>() {
 
     override fun build(): Component<O, *> {
         return TextViewComponent(
+            changeEnabled,
             observeClicks,
             observeText,
             changeText,
@@ -43,6 +44,7 @@ open class TextViewImpl<O : Any> : TextView<O>, ViewImpl<O>() {
 }
 
 private class TextViewComponent<O : Any>(
+    private val changeEnabled: Observable<Boolean>?,
     private val observeClicks: PublishRelay<Any>?,
     private val observeText: PublishRelay<CharSequence>?,
     private val changeText: Observable<out CharSequence>?,
@@ -52,9 +54,19 @@ private class TextViewComponent<O : Any>(
     override val viewStructure = toViewStructure(this)
     override fun bind(view: AppCompatTextView): Disposable {
         val disposable = CompositeDisposable()
+
+        if (changeEnabled != null) disposable += changeEnabled.subscribe { view.isEnabled = it }
+
         if (observeClicks != null) disposable += RxView.clicks(view).subscribe(observeClicks)
-        if (observeText != null) disposable += RxTextView.textChanges(view).subscribe(observeText)
+
+        if (observeText != null) disposable += RxTextView
+            .textChanges(view)
+            .skipInitialValue()
+            .map { it.toString() }
+            .subscribe(observeText)
+
         if (changeText != null) disposable += changeText.subscribe(RxTextView.text(view))
+
         return disposable
     }
 }

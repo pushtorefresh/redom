@@ -11,12 +11,16 @@ import com.pushtorefresh.redom.android.recycler.ViewTypeRegistryImpl
 import com.pushtorefresh.redom.api.Button
 import com.pushtorefresh.redom.api.EditText
 import com.pushtorefresh.redom.api.LinearLayout
+import com.pushtorefresh.redom.api.LinearLayout.Orientation
 import com.pushtorefresh.redom.api.TextView
 import com.pushtorefresh.redom.samples.rxredux.signin.SignInStateMachine.Action
 import com.pushtorefresh.redom.samples.rxredux.signin.SignInStateMachine.State
 import io.reactivex.Observable
-import io.reactivex.android.schedulers.AndroidSchedulers.mainThread
+import io.reactivex.android.schedulers.AndroidSchedulers
+import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.disposables.Disposable
+import io.reactivex.rxkotlin.plusAssign
+import io.reactivex.schedulers.Schedulers
 
 class SignInAndroidView(root: ViewGroup) : SignInView {
 
@@ -31,29 +35,44 @@ class SignInAndroidView(root: ViewGroup) : SignInView {
         root.findViewById<ViewGroup>(android.R.id.content).addView(recyclerView)
     }
 
-    override val actions: Observable<Action> = PublishRelay.create()
+    override val actions = PublishRelay.create<Action>()
+
+    private val disposable = CompositeDisposable()
 
     override fun render(stateStream: Observable<State>): Disposable = stateStream
-        .observeOn(mainThread())
-        .subscribe { state ->
-            adapter.setComponents(androidDom<Unit> {
+        .observeOn(Schedulers.computation())
+        .map { state ->
+            disposable.clear()
+
+            androidDom<Unit> {
                 LinearLayout {
+
+                    orientation = Observable.just(Orientation.Vertical)
+
                     EditText {
-                        text.subscribe {
-                            //actions.accept(it)
-                        }
+                        text = Observable.just(state.email)
+
+                        disposable += text
+                            .map { Action.ChangeEmail(it.toString()) }
+                            .subscribe(actions)
                     }
 
                     EditText {
-                       // actions.accept(it)
+                        text = Observable.just(state.password)
+
+                        disposable += text
+                            .map { Action.ChangePassword(it.toString()) }
+                            .subscribe(actions)
                     }
 
                     Button {
                         text = Observable.just("Sign In")
+                        enabled = Observable.just(state.signInButtonEnabled)
+                        disposable += clicks.map { Action.SignIn }.subscribe(actions)
                     }
 
                     TextView {
-                        text = when (state) {
+                        /*text = */when (state) {
                             is State.Idle -> ""
                             is State.SigningIn -> "Signing in…"
                             is State.SignInSuccessful -> "Successfully signed in!"
@@ -62,6 +81,9 @@ class SignInAndroidView(root: ViewGroup) : SignInView {
                             .let { Observable.just(it) }
                     }
                 }
-            }.build())
+            }.build()
         }
+        .observeOn(AndroidSchedulers.mainThread())
+        .subscribe { adapter.setComponents(it) }
+
 }
