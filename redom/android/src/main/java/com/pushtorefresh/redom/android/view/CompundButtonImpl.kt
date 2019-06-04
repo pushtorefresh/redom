@@ -34,14 +34,15 @@ abstract class CompundButtonImpl<O : Any> : ButtonImpl<O>(), CompoundButton<O> {
 
     override fun build(): Component<O, out Any> {
         return CompoundButtonComponent(
-            observeClicks,
-            observeText,
-            observeChecked,
-            changeText,
-            changeChecked,
-            toggle,
-            getCompoundClass(),
-            Observable.merge(outputObservables)
+                changeEnabled,
+                observeClicks,
+                observeText,
+                observeChecked,
+                changeText,
+                changeChecked,
+                toggle,
+                getCompoundClass(),
+                Observable.merge(outputObservables)
         )
     }
 
@@ -65,20 +66,22 @@ class CheckBoxImpl<O : Any> : CompundButtonImpl<O>(), CheckBox<O> {
 }
 
 private class CompoundButtonComponent<O : Any>(
-    private val observeClicks: PublishRelay<Any>?,
-    private val observeText: PublishRelay<CharSequence>?,
-    private val observeChecked: PublishRelay<Boolean>?,
-    private val changeText: Observable<out CharSequence>?,
-    private val changeChecked: Observable<out Boolean>?,
-    private val toggle: Observable<Any>?,
-    override val clazz: Class<out View<*>>,
-    override val output: Observable<O>
+        private val changeEnabled: Observable<Boolean>?,
+        private val observeClicks: PublishRelay<Any>?,
+        private val observeText: PublishRelay<CharSequence>?,
+        private val observeChecked: PublishRelay<Boolean>?,
+        private val changeText: Observable<out CharSequence>?,
+        private val changeChecked: Observable<out Boolean>?,
+        private val toggle: Observable<Any>?,
+        override val clazz: Class<out View<*>>,
+        override val output: Observable<O>
 ) : Component<O, android.widget.CompoundButton> {
 
     override val viewStructure = toViewStructure(this)
 
     override fun bind(view: android.widget.CompoundButton): Disposable {
         val disposable = CompositeDisposable()
+        if (changeEnabled != null) disposable += changeEnabled.subscribe { view.isEnabled = it }
         if (observeClicks != null) disposable += RxView.clicks(view).subscribe(observeClicks)
         if (observeText != null) disposable += RxTextView.textChanges(view).subscribe(observeText)
         if (observeChecked != null) disposable += RxCompoundButton.checkedChanges(view).subscribe(observeChecked)

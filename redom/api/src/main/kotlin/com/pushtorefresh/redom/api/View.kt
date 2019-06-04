@@ -11,6 +11,7 @@ interface View<O : Any> {
         operator fun plusAssign(observable: Observable<T>)
     }
 
+    var enabled: Observable<Boolean>
     val clicks: Observable<Any>
     val output: Output<O>
 
@@ -24,15 +25,22 @@ abstract class ViewImpl<O : Any> : View<O> {
         private set(value) {
             field = value
         }
+    protected var changeEnabled: Observable<Boolean>? = null
+
+    override val clicks: Observable<Any>
+        get() = observeClicks ?: PublishRelay.create<Any>().also {
+            observeClicks = it
+        }
+
+    override var enabled: Observable<Boolean>
+        get() = throw IllegalAccessError("Enabled cannot be observed")
+        set(value) {
+            changeEnabled= value
+        }
 
     override val output = object : View.Output<O> {
         override fun plusAssign(observable: Observable<O>) {
             outputObservables += observable
         }
     }
-
-    override val clicks: Observable<Any>
-        get() = observeClicks ?: PublishRelay.create<Any>().also {
-            observeClicks = it
-        }
 }
