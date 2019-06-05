@@ -16,30 +16,33 @@ import io.reactivex.rxkotlin.plusAssign
 open class ButtonImpl<O : Any> : Button<O>, TextViewImpl<O>() {
     override fun build(): Component<O, out Any> {
         return ButtonComponent(
-            observeClicks,
-            observeText,
-            changeText,
-            Button::class.java,
-            Observable.merge(outputObservables)
+                changeEnabled,
+                observeClicks,
+                observeText,
+                changeText,
+                Button::class.java,
+                Observable.merge(outputObservables)
         )
     }
 }
 
 private class ButtonComponent<O : Any>(
-    private val observeClicks: PublishRelay<Any>?,
-    private val observeText: PublishRelay<CharSequence>?,
-    private val changeText: Observable<out CharSequence>?,
-    override val clazz: Class<out View<*>>,
-    override val output: Observable<O>
+        private val changeEnabled: Observable<Boolean>?,
+        private val observeClicks: PublishRelay<Any>?,
+        private val observeText: PublishRelay<CharSequence>?,
+        private val changeText: Observable<out CharSequence>?,
+        override val clazz: Class<out View<*>>,
+        override val output: Observable<O>
 ) : Component<O, AppCompatButton> {
 
     override val viewStructure = toViewStructure(this)
 
     override fun bind(view: AppCompatButton): Disposable {
         val disposable = CompositeDisposable()
+        if (changeText != null) disposable += changeText.subscribe(RxTextView.text(view))
+        if (changeEnabled != null) disposable += changeEnabled.subscribe { view.isEnabled = it }
         if (observeClicks != null) disposable += RxView.clicks(view).subscribe(observeClicks)
         if (observeText != null) disposable += RxTextView.textChanges(view).subscribe(observeText)
-        if (changeText != null) disposable += changeText.subscribe(RxTextView.text(view))
         return disposable
     }
 }

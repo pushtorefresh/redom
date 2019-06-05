@@ -1,5 +1,7 @@
 package com.pushtorefresh.redom.samples.rxredux.signin
 
+import android.util.Log
+import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -31,7 +33,15 @@ class SignInAndroidView(root: ViewGroup) : SignInView {
         adapter = Adapter(ViewTypeRegistryImpl(), Inflater)
         recyclerView.adapter = adapter
         recyclerView.layoutManager = LinearLayoutManager(root.context)
+        recyclerView.addOnChildAttachStateChangeListener(object : RecyclerView.OnChildAttachStateChangeListener {
+            override fun onChildViewDetachedFromWindow(view: View) {
+                Log.i("RecyclerView", "detach ${view::class.java}")
+            }
 
+            override fun onChildViewAttachedToWindow(view: View) {
+                Log.i("RecyclerView", "attach ${view::class.java}")
+            }
+        })
         root.findViewById<ViewGroup>(android.R.id.content).addView(recyclerView)
     }
 
