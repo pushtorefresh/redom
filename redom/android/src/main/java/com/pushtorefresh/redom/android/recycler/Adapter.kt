@@ -21,11 +21,19 @@ class Adapter(
     private val inflater: (ViewStructure, parent: ViewGroup) -> android.view.View
 ) : RecyclerView.Adapter<ComponentViewHolder>() {
 
+    init {
+        setHasStableIds(true)
+    }
+
     private var components: List<Component<out Any, out Any>> = listOf()
 
     override fun getItemCount() = components.size
 
     override fun getItemViewType(position: Int) = viewTypeRegistry.viewTypeOf(components[position])
+
+    override fun getItemId(position: Int): Long {
+        return "$position-${getItemViewType(position)}".hashCode().toLong() // TODO revisit zalupa with Vova
+    }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ComponentViewHolder =
         ComponentViewHolder(inflater(viewTypeRegistry.viewTreeOf(viewType), parent))

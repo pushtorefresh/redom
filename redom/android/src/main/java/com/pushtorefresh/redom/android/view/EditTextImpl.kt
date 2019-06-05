@@ -39,7 +39,10 @@ class EditTextImpl<O : Any> : EditText<O>, TextViewImpl<O>() {
             val disposable = CompositeDisposable()
 
             if (observeClicks != null) disposable += RxView.clicks(view).subscribe(observeClicks)
-            if (changeText != null) disposable += changeText.subscribe(RxTextView.text(view))
+            if (changeText != null) disposable += changeText
+                .filter { view.text.toString() != it } // TODO with domic like diffing
+                .subscribe(RxTextView.text(view))
+
             if (observeText != null) disposable += RxTextView
                     .textChanges(view)
                     .skipInitialValue()
