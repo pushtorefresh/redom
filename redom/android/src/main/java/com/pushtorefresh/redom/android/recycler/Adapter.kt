@@ -27,6 +27,8 @@ class Adapter(
 
     private var components: List<Component<out Any, out Any>> = listOf()
 
+    override fun onViewRecycled(holder: ComponentViewHolder) = holder.unbind()
+
     override fun getItemCount() = components.size
 
     override fun getItemViewType(position: Int) = viewTypeRegistry.viewTypeOf(components[position])

@@ -8,8 +8,11 @@ import io.reactivex.rxkotlin.plusAssign
 
 class ComponentViewHolder(view: View) : RecyclerView.ViewHolder(view) {
     private val disposable = CompositeDisposable()
+
     fun bind(component: Component<out Any, Any>) {
         disposable.clear()
         disposable += component.bind(itemView)
     }
+
+    fun unbind(): Unit = disposable.clear()
 }
