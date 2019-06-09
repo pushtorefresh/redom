@@ -50,8 +50,8 @@ private class TextViewComponent<O : Any>(
     private val changeText: Observable<out CharSequence>?,
     override val clazz: Class<out View<*>>,
     override val output: Observable<O>
-) : Component<O, AppCompatTextView> {
-    override val viewStructure = toViewStructure(this)
+) : DefaultComponent<O, AppCompatTextView>() {
+
     override fun bind(view: AppCompatTextView): Disposable {
         val disposable = CompositeDisposable()
 

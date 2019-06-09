@@ -31,9 +31,7 @@ class EditTextImpl<O : Any> : EditText<O>, TextViewImpl<O>() {
         private val changeText: Observable<out CharSequence>?,
         override val clazz: Class<out View<*>>,
         override val output: Observable<O>
-    ) : Component<O, AppCompatEditText> {
-
-        override val viewStructure = toViewStructure(this)
+    ) : DefaultComponent<O, AppCompatEditText>() {
 
         override fun bind(view: AppCompatEditText): Disposable {
             val disposable = CompositeDisposable()

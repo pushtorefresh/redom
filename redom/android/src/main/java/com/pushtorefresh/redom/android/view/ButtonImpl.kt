@@ -33,9 +33,7 @@ private class ButtonComponent<O : Any>(
         private val changeText: Observable<out CharSequence>?,
         override val clazz: Class<out View<*>>,
         override val output: Observable<O>
-) : Component<O, AppCompatButton> {
-
-    override val viewStructure = toViewStructure(this)
+) : DefaultComponent<O, AppCompatButton>() {
 
     override fun bind(view: AppCompatButton): Disposable {
         val disposable = CompositeDisposable()

@@ -75,9 +75,7 @@ private class CompoundButtonComponent<O : Any>(
         private val toggle: Observable<Any>?,
         override val clazz: Class<out View<*>>,
         override val output: Observable<O>
-) : Component<O, android.widget.CompoundButton> {
-
-    override val viewStructure = toViewStructure(this)
+) : DefaultComponent<O, android.widget.CompoundButton>() {
 
     override fun bind(view: android.widget.CompoundButton): Disposable {
         val disposable = CompositeDisposable()
