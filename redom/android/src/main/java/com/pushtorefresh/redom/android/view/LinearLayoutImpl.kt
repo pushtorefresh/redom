@@ -49,10 +49,9 @@ private class LinearLayoutComponent<O : Any>(
     private val orientation: Observable<LinearLayout.Orientation>?,
     override val children: List<Component<O, out Any>>,
     override val output: Observable<O>
-) : ComponentGroup<O, android.widget.LinearLayout> {
+) : DefaultComponent<O, android.widget.LinearLayout>(), ComponentGroup<O, android.widget.LinearLayout> {
 
     override val clazz: Class<out ViewGroup<out Any>> = LinearLayout::class.java
-    override val viewStructure = toViewStructure(this)
 
     override fun bind(view: android.widget.LinearLayout): Disposable {
         val disposable = CompositeDisposable()
