@@ -1,75 +1,52 @@
 package com.pushtorefresh.redom.android.view
 
-import com.jakewharton.rxbinding2.view.RxView
-import com.jakewharton.rxrelay2.PublishRelay
-import com.pushtorefresh.redom.api.Component
+import com.pushtorefresh.redom.api.BaseComponent
+import com.pushtorefresh.redom.api.Binding
 import com.pushtorefresh.redom.api.ComponentGroup
 import com.pushtorefresh.redom.api.LinearLayout
 import com.pushtorefresh.redom.api.LinearLayout.Orientation.Horizontal
 import com.pushtorefresh.redom.api.LinearLayout.Orientation.Vertical
 import com.pushtorefresh.redom.api.View
-import com.pushtorefresh.redom.api.ViewGroup
-import com.pushtorefresh.redom.api.ViewImpl
 import com.pushtorefresh.redom.api.ViewParent
-import com.pushtorefresh.redom.api.toViewStructure
-import io.reactivex.Observable
-import io.reactivex.disposables.CompositeDisposable
-import io.reactivex.disposables.Disposable
-import io.reactivex.rxkotlin.plusAssign
 
-class LinearLayoutImpl<O : Any>(private val viewParent: ViewParent<O>) : LinearLayout<O>, ViewImpl<O>() {
+class LinearLayoutImpl(private val viewParent: ViewParent) : LinearLayout, ViewImpl() {
+    override var orientation = LinearLayout.Orientation.Vertical
 
-    private val views = mutableListOf<View<O>>()
-    private var _orientation: Observable<LinearLayout.Orientation>? = null
+    val views = mutableListOf<View>()
 
-    override var orientation: Observable<LinearLayout.Orientation>
-        get() = throw IllegalAccessError()
-        set(value) {
-            _orientation = value
-        }
-
-    override fun <V : View<O>> createView(clazz: Class<out V>): V {
+    override fun <V : View> createView(clazz: Class<out V>): V {
         return viewParent.createView(clazz).also { views += it }
     }
 
-    override fun build(): ComponentGroup<O, out Any> {
+    override fun build(): BaseComponent<*, *> {
         val children = views.map { it.build() }
-
-        return LinearLayoutComponent(
-            observeClicks,
-            _orientation,
-            children,
-            Observable.merge(outputObservables)
+        return ComponentGroup(
+            binder = ::bindLinearLayout,
+            dslView = this,
+            clazz = LinearLayout::class.java,
+            children = children
         )
     }
 }
 
-private class LinearLayoutComponent<O : Any>(
-    private val observeClicks: PublishRelay<Any>?,
-    private val orientation: Observable<LinearLayout.Orientation>?,
-    override val children: List<Component<O, out Any>>,
-    override val output: Observable<O>
-) : DefaultComponent<O, android.widget.LinearLayout>(), ComponentGroup<O, android.widget.LinearLayout> {
-
-    override val clazz: Class<out ViewGroup<out Any>> = LinearLayout::class.java
-
-    override fun bind(view: android.widget.LinearLayout): Disposable {
-        val disposable = CompositeDisposable()
-        if (observeClicks != null) disposable += RxView.clicks(view)
-            .subscribe(observeClicks)
-        if (orientation != null) disposable += orientation.subscribe {
-            @Suppress("WHEN_ENUM_CAN_BE_NULL_IN_JAVA")
-            view.orientation = when (it) {
-                Horizontal -> android.widget.LinearLayout.HORIZONTAL
-                Vertical -> android.widget.LinearLayout.VERTICAL
-            }
+fun bindLinearLayout(
+    dslView: LinearLayout,
+    view: android.widget.LinearLayout,
+    children: List<BaseComponent<*, *>>
+): Binding {
+    val bindView = bindView(dslView, view)
+    view.orientation = when (dslView.orientation) {
+        Horizontal -> android.widget.LinearLayout.HORIZONTAL
+        Vertical -> android.widget.LinearLayout.VERTICAL
+    }
+    val childrenBindings = children.mapIndexed { index, childComponent ->
+        @Suppress("UNCHECKED_CAST")
+        (childComponent as BaseComponent<View, android.view.View>).bind(view.getChildAt(index))
+    }
+    return object : Binding {
+        override fun unbind() {
+            childrenBindings.forEach(Binding::unbind)
+            bindView.unbind()
         }
-
-        children.forEachIndexed { index, component ->
-            @Suppress("UNCHECKED_CAST")
-            disposable += (component as Component<O, android.view.View>).bind(view.getChildAt(index))
-        }
-
-        return disposable
     }
 }

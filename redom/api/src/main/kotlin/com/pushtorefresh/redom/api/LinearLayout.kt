@@ -1,10 +1,8 @@
 package com.pushtorefresh.redom.api
 
-import io.reactivex.Observable
+interface LinearLayout : ViewGroup {
 
-interface LinearLayout<O : Any> : ViewGroup<O> {
-
-    var orientation: Observable<Orientation>
+    var orientation: Orientation
 
     enum class Orientation {
         Vertical,
@@ -12,5 +10,5 @@ interface LinearLayout<O : Any> : ViewGroup<O> {
     }
 }
 
-fun <O : Any> ViewParent<O>.LinearLayout(lambda: LinearLayout<O>.() -> Unit): Unit =
-    lambda(createView(LinearLayout::class.java as Class<LinearLayout<O>>))
+fun  ViewParent.LinearLayout(lambda: LinearLayout.() -> Unit): Unit =
+    lambda(createView(LinearLayout::class.java))

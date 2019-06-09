@@ -1,23 +1,23 @@
 package com.pushtorefresh.redom.android
 
 import com.pushtorefresh.redom.android.view.AndroidViewParent
-import com.pushtorefresh.redom.api.Component
+import com.pushtorefresh.redom.api.BaseComponent
 import com.pushtorefresh.redom.api.Dom
 import com.pushtorefresh.redom.api.View
 import com.pushtorefresh.redom.api.ViewParent
 
-internal class AndroidDom<O : Any>(private val viewParent: ViewParent<O>) : Dom<O> {
+internal class AndroidDom(private val viewParent: ViewParent) : Dom {
 
-    private val views = mutableListOf<View<O>>()
+    private val views = mutableListOf<View>()
 
-    override fun <V : View<O>> createView(clazz: Class<out V>): V =
+    override fun <V : View> createView(clazz: Class<out V>): V =
         viewParent.createView(clazz).also { views += it }
 
-    override fun build(): List<Component<O, *>> =
-        views.map(View<O>::build)
+    override fun build(): List<BaseComponent<*, *>> =
+        views.map(View::build)
 
 }
 
-fun <O : Any> androidDom(viewParent: ViewParent<O> = AndroidViewParent(), builder: Dom<O>.() -> Unit): Dom<O> {
+fun <O : Any> androidDom(viewParent: ViewParent = AndroidViewParent(), builder: Dom.() -> Unit): Dom {
     return AndroidDom(viewParent).apply(builder)
 }
