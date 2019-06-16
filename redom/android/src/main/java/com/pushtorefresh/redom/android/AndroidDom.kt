@@ -18,6 +18,6 @@ internal class AndroidDom(private val viewParent: ViewParent) : Dom {
 
 }
 
-fun <O : Any> androidDom(viewParent: ViewParent = AndroidViewParent(), builder: Dom.() -> Unit): Dom {
+fun androidDom(viewParent: ViewParent = AndroidViewParent(), builder: Dom.() -> Unit): Dom {
     return AndroidDom(viewParent).apply(builder)
 }

@@ -3,6 +3,7 @@ package com.pushtorefresh.redom.testutil
 import com.pushtorefresh.redom.api.BaseComponent
 import com.pushtorefresh.redom.api.Component
 import com.pushtorefresh.redom.api.ComponentGroup
+import com.pushtorefresh.redom.api.LayoutParams
 import com.pushtorefresh.redom.api.View
 import com.pushtorefresh.redom.api.ViewGroup
 
@@ -14,6 +15,7 @@ fun <T : View> createComponent(clazz: Class<T>): Component<View, Any> {
     return Component(
         binder = { _, _ -> TODO() },
         dslView = object : View {
+            override var layoutParams: LayoutParams? = null
             override var enabled: Boolean
                 get() = TODO("not implemented") //To change initializer of created properties use File | Settings | File Templates.
                 set(value) {}
@@ -36,6 +38,7 @@ fun <T : ViewGroup> createComponentGroup(
     return ComponentGroup(
         binder = { _, _, _ -> TODO() },
         dslView = object : ViewGroup {
+            override var layoutParams: LayoutParams? = null
             override var enabled: Boolean
                 get() = TODO("not implemented") //To change initializer of created properties use File | Settings | File Templates.
                 set(value) {}

@@ -7,6 +7,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.pushtorefresh.redom.android.androidDom
 import com.pushtorefresh.redom.android.recycler.Adapter
+import com.pushtorefresh.redom.android.recycler.AndroidLayoutParamsFactory
 import com.pushtorefresh.redom.android.recycler.Inflater
 import com.pushtorefresh.redom.android.recycler.ViewTypeRegistryImpl
 import com.pushtorefresh.redom.api.Button
@@ -23,12 +24,12 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
         val recyclerView = RecyclerView(this)
-        val adapter = Adapter(ViewTypeRegistryImpl(), Inflater)
+        val adapter = Adapter(ViewTypeRegistryImpl(), Inflater(AndroidLayoutParamsFactory(this)))
         recyclerView.adapter = adapter
         recyclerView.layoutManager = LinearLayoutManager(this)
         findViewById<ViewGroup>(android.R.id.content).addView(recyclerView)
 
-        adapter.setComponents(androidDom<UI> {
+        adapter.setComponents(androidDom {
             LinearLayout {
 
                 orientation = Vertical

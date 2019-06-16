@@ -1,9 +1,11 @@
 package com.pushtorefresh.redom.android.view
 
 import com.pushtorefresh.redom.api.Binding
+import com.pushtorefresh.redom.api.LayoutParams
 import com.pushtorefresh.redom.api.View
 
 abstract class ViewImpl : View {
+    override var layoutParams: LayoutParams? = null
     override var enabled: Boolean = true
     override var onClick: (() -> Unit)? = null
 }
