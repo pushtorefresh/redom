@@ -23,7 +23,12 @@ open class TextViewImpl : TextView, ViewImpl() {
 
 fun bindTextView(dslText: TextView, textView: android.widget.TextView): Binding {
     val viewBinding = bindView(dslText, textView)
-    textView.text = dslText.text
+
+    if (textView.text.toString() != dslText.text) {
+        // TODO do it with Domic-like diffing
+        textView.text = dslText.text
+    }
+
     val textWatcher = dslText.onTextChange?.let {
         object : TextWatcher {
             override fun afterTextChanged(s: Editable) {
