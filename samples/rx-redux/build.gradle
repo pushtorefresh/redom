@@ -16,4 +16,5 @@ dependencies {
     implementation libraries.rxKotlin
     implementation libraries.rxReplayingShareKotlin
     implementation libraries.rxAndroid
+    implementation libraries.rxRelay
 }
