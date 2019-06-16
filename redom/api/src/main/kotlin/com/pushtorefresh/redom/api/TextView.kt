@@ -2,12 +2,11 @@
 
 package com.pushtorefresh.redom.api
 
-import io.reactivex.Observable
-
 @Dom.RootDsl
-interface TextView<O : Any> : View<O> {
-    var text: Observable<out CharSequence>
+interface TextView : View {
+    var text: CharSequence
+    var onTextChange: ((CharSequence) -> Unit)?
 }
 
-fun <O : Any> ViewParent<O>.TextView(lambda: TextView<O>.() -> Unit): Unit =
-    lambda(createView(TextView::class.java as Class<TextView<O>>))
+fun ViewParent.TextView(lambda: TextView.() -> Unit): Unit =
+    lambda(createView(TextView::class.java))

@@ -1,9 +1,9 @@
 package com.pushtorefresh.redom.api
 
 @Dom.RootDsl
-interface Dom<O : Any> : ViewParent<O> {
+interface Dom : ViewParent {
 
-    fun build(): List<Component<O, out Any>>
+    fun build(): List<BaseComponent<*, *>>
 
     @DslMarker
     annotation class RootDsl

@@ -7,13 +7,14 @@ import androidx.appcompat.widget.AppCompatEditText
 import androidx.appcompat.widget.AppCompatTextView
 import androidx.appcompat.widget.SwitchCompat
 import androidx.recyclerview.widget.RecyclerView
+import com.pushtorefresh.redom.api.BaseComponent
 import com.pushtorefresh.redom.api.Button
 import com.pushtorefresh.redom.api.CheckBox
-import com.pushtorefresh.redom.api.Component
 import com.pushtorefresh.redom.api.EditText
 import com.pushtorefresh.redom.api.LinearLayout
 import com.pushtorefresh.redom.api.Switch
 import com.pushtorefresh.redom.api.TextView
+import com.pushtorefresh.redom.api.View
 import com.pushtorefresh.redom.api.ViewStructure
 
 class Adapter(
@@ -25,7 +26,7 @@ class Adapter(
         setHasStableIds(true)
     }
 
-    private var components: List<Component<out Any, out Any>> = listOf()
+    private var components: List<BaseComponent<out View, out Any>> = listOf()
 
     override fun onViewRecycled(holder: ComponentViewHolder) = holder.unbind()
 
@@ -42,10 +43,10 @@ class Adapter(
 
     override fun onBindViewHolder(holder: ComponentViewHolder, position: Int) {
         @Suppress("UNCHECKED_CAST")
-        holder.bind(components[position] as Component<out Any, Any>)
+        holder.bind(components[position] as BaseComponent<out View, Any>)
     }
 
-    fun setComponents(components: List<Component<out Any, out Any>>) {
+    fun setComponents(components: List<BaseComponent<out View, out Any>>) {
         this.components = components
         notifyDataSetChanged()
     }
