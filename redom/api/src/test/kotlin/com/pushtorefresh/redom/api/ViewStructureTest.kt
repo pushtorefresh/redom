@@ -11,7 +11,7 @@ class ViewStructureTest {
     fun toViewStructure_TextView() {
         val textView = createComponent(TextView::class.java)
 
-        assertThat(textView.viewStructure).isEqualTo(ViewStructure.View(TextView::class.java))
+        assertThat(textView.viewStructure).isEqualTo(ViewStructure.View(TextView::class.java, null))
     }
 
     @Test
@@ -21,7 +21,8 @@ class ViewStructureTest {
         assertThat(textView.viewStructure).isEqualTo(
             ViewStructure.ViewGroup(
                 LinearLayout::class.java,
-                children = emptyList()
+                children = emptyList(),
+                layoutParams = null
             )
         )
     }
@@ -35,8 +36,9 @@ class ViewStructureTest {
 
         assertThat(textView.viewStructure).isEqualTo(
             ViewStructure.ViewGroup(
-                LinearLayout::class.java, children = listOf
-                    (ViewStructure.View(TextView::class.java))
+                clazz = LinearLayout::class.java,
+                children = listOf(ViewStructure.View(TextView::class.java, null)),
+                layoutParams = null
             )
         )
     }
@@ -53,10 +55,12 @@ class ViewStructureTest {
 
         assertThat(textView.viewStructure).isEqualTo(
             ViewStructure.ViewGroup(
-                LinearLayout::class.java, children = listOf(
-                    ViewStructure.View(TextView::class.java),
-                    ViewStructure.ViewGroup(LinearLayout::class.java, children = emptyList())
-                )
+                LinearLayout::class.java,
+                children = listOf(
+                    ViewStructure.View(TextView::class.java, null),
+                    ViewStructure.ViewGroup(LinearLayout::class.java, children = emptyList(), layoutParams = null)
+                ),
+                layoutParams = null
             )
         )
     }
