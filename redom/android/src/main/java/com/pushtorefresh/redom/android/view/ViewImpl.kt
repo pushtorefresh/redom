@@ -5,6 +5,7 @@ import com.pushtorefresh.redom.api.LayoutParams
 import com.pushtorefresh.redom.api.View
 
 abstract class ViewImpl : View {
+    override var style: Int? = null
     override var layoutParams: LayoutParams? = null
     override var enabled: Boolean = true
     override var onClick: (() -> Unit)? = null

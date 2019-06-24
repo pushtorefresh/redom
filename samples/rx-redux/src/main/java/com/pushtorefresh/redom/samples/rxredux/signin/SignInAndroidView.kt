@@ -17,6 +17,7 @@ import com.pushtorefresh.redom.api.LayoutParams
 import com.pushtorefresh.redom.api.LinearLayout
 import com.pushtorefresh.redom.api.LinearLayout.Orientation
 import com.pushtorefresh.redom.api.TextView
+import com.pushtorefresh.redom.samples.rxredux.R
 import com.pushtorefresh.redom.samples.rxredux.signin.SignInStateMachine.Action
 import com.pushtorefresh.redom.samples.rxredux.signin.SignInStateMachine.State
 import io.reactivex.Observable
@@ -87,6 +88,8 @@ class SignInAndroidView(root: ViewGroup) : SignInView {
                             height = LayoutParams.Size.WrapContent,
                             gravity = LinearLayout.LayoutParams.Gravity.CENTER_HORIZONTAL
                         )
+                        style = R.attr.buttonStyle
+
                         text = "Sign In"
                         enabled = state.signInButtonEnabled
 
