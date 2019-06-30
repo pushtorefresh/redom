@@ -15,6 +15,7 @@ fun <T : View> createComponent(clazz: Class<T>): Component<View, Any> {
     return Component(
         binder = { _, _ -> TODO() },
         dslView = object : View {
+            override var style: Int? = null
             override var layoutParams: LayoutParams? = null
             override var enabled: Boolean
                 get() = TODO("not implemented") //To change initializer of created properties use File | Settings | File Templates.
@@ -38,6 +39,7 @@ fun <T : ViewGroup> createComponentGroup(
     return ComponentGroup(
         binder = { _, _, _ -> TODO() },
         dslView = object : ViewGroup {
+            override var style: Int? = null
             override var layoutParams: LayoutParams? = null
             override var enabled: Boolean
                 get() = TODO("not implemented") //To change initializer of created properties use File | Settings | File Templates.
