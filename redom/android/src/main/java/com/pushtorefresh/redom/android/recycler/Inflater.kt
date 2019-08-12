@@ -4,11 +4,13 @@ import android.view.ViewGroup
 import androidx.appcompat.widget.AppCompatButton
 import androidx.appcompat.widget.AppCompatCheckBox
 import androidx.appcompat.widget.AppCompatEditText
+import androidx.appcompat.widget.AppCompatImageView
 import androidx.appcompat.widget.AppCompatTextView
 import androidx.appcompat.widget.SwitchCompat
 import com.pushtorefresh.redom.api.Button
 import com.pushtorefresh.redom.api.CheckBox
 import com.pushtorefresh.redom.api.EditText
+import com.pushtorefresh.redom.api.ImageView
 import com.pushtorefresh.redom.api.LayoutParams
 import com.pushtorefresh.redom.api.LinearLayout
 import com.pushtorefresh.redom.api.Switch
@@ -29,6 +31,7 @@ class Inflater(
                 Switch::class.java -> if (style == null) SwitchCompat(context) else SwitchCompat(context, null, style)
                 CheckBox::class.java -> if (style == null) AppCompatCheckBox(context) else AppCompatCheckBox(context, null, style)
                 EditText::class.java -> if (style == null) AppCompatEditText(context) else AppCompatEditText(context, null, style)
+                ImageView::class.java -> if (style == null) AppCompatImageView(context) else AppCompatImageView(context, null, style)
                 else -> throw IllegalArgumentException("Inflating of ${viewStructure.clazz} is not supported yet")
             }
             is ViewStructure.ViewGroup -> when (viewStructure.clazz) {

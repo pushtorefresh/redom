@@ -3,6 +3,7 @@ package com.pushtorefresh.redom.android.view
 import com.pushtorefresh.redom.api.Button
 import com.pushtorefresh.redom.api.CheckBox
 import com.pushtorefresh.redom.api.EditText
+import com.pushtorefresh.redom.api.ImageView
 import com.pushtorefresh.redom.api.LinearLayout
 import com.pushtorefresh.redom.api.Switch
 import com.pushtorefresh.redom.api.TextView
@@ -19,6 +20,7 @@ class AndroidViewParent : ViewParent {
             Switch::class.java -> SwitchImpl() as V
             CheckBox::class.java -> CheckBoxImpl() as V
             EditText::class.java -> EditTextImpl() as V
+            ImageView::class.java -> ImageViewImpl() as V
             else -> throw IllegalArgumentException("Unsupported $clazz")
         }
     }
