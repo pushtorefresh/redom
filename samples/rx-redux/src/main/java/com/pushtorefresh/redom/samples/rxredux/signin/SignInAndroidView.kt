@@ -1,5 +1,7 @@
 package com.pushtorefresh.redom.samples.rxredux.signin
 
+import android.content.Context
+import android.content.Intent
 import android.util.Log
 import android.view.View
 import android.view.ViewGroup
@@ -11,6 +13,7 @@ import com.pushtorefresh.redom.android.recycler.Adapter
 import com.pushtorefresh.redom.android.recycler.AndroidLayoutParamsFactory
 import com.pushtorefresh.redom.android.recycler.Inflater
 import com.pushtorefresh.redom.android.recycler.ViewTypeRegistryImpl
+import com.pushtorefresh.redom.api.BaseComponent
 import com.pushtorefresh.redom.api.Button
 import com.pushtorefresh.redom.api.EditText
 import com.pushtorefresh.redom.api.LayoutParams
@@ -18,6 +21,7 @@ import com.pushtorefresh.redom.api.LinearLayout
 import com.pushtorefresh.redom.api.LinearLayout.Orientation
 import com.pushtorefresh.redom.api.TextView
 import com.pushtorefresh.redom.samples.rxredux.R
+import com.pushtorefresh.redom.samples.rxredux.feed.FeedActivity
 import com.pushtorefresh.redom.samples.rxredux.signin.SignInStateMachine.Action
 import com.pushtorefresh.redom.samples.rxredux.signin.SignInStateMachine.State
 import io.reactivex.Observable
@@ -28,8 +32,10 @@ import io.reactivex.schedulers.Schedulers
 class SignInAndroidView(root: ViewGroup) : SignInView {
 
     private val adapter: Adapter
+    private val context: Context
 
     init {
+        context = root.context
         val recyclerView = RecyclerView(root.context)
         adapter = Adapter(ViewTypeRegistryImpl(), Inflater(AndroidLayoutParamsFactory(root.context)))
         recyclerView.adapter = adapter
@@ -48,66 +54,75 @@ class SignInAndroidView(root: ViewGroup) : SignInView {
 
     override val actions = PublishRelay.create<Action>()
 
-    override fun render(stateStream: Observable<State>): Disposable = stateStream
-        .observeOn(Schedulers.computation())
-        .map { state ->
-            androidDom {
-                LinearLayout {
-                    layoutParams = LayoutParams.create(
-                        width = LayoutParams.Size.MatchParent,
-                        height = LayoutParams.Size.MatchParent,
-                        marginStart = LayoutParams.Size.Scalar.Dp(16),
-                        marginEnd = LayoutParams.Size.Scalar.Dp(16)
-                    )
-                    orientation = Orientation.Vertical
+    override fun render(stateStream: Observable<State>): Disposable {
+        val share = stateStream.share()
 
-                    EditText {
-                        layoutParams = LinearLayout.LayoutParams.create(
+        return share
+            .observeOn(Schedulers.computation())
+            .filter { it !is State.SignInSuccessful }
+            .map { state ->
+                androidDom {
+                    LinearLayout {
+                        layoutParams = LayoutParams.create(
                             width = LayoutParams.Size.MatchParent,
-                            height = LayoutParams.Size.WrapContent,
-                            gravity = LinearLayout.LayoutParams.Gravity.CENTER_HORIZONTAL
+                            height = LayoutParams.Size.MatchParent,
+                            marginStart = LayoutParams.Size.Scalar.Dp(16),
+                            marginEnd = LayoutParams.Size.Scalar.Dp(16)
                         )
-                        text = state.email
-                        onTextChange = { actions.accept(Action.ChangeEmail(it)) }
-                    }
+                        orientation = Orientation.Vertical
 
-                    EditText {
-                        layoutParams = LinearLayout.LayoutParams.create(
-                            width = LayoutParams.Size.MatchParent,
-                            height = LayoutParams.Size.WrapContent,
-                            gravity = LinearLayout.LayoutParams.Gravity.CENTER_HORIZONTAL
-                        )
-                        text = state.password
+                        EditText {
+                            layoutParams = LinearLayout.LayoutParams.create(
+                                width = LayoutParams.Size.MatchParent,
+                                height = LayoutParams.Size.WrapContent,
+                                gravity = LinearLayout.LayoutParams.Gravity.CENTER_HORIZONTAL
+                            )
+                            text = state.email
+                            onTextChange = { actions.accept(Action.ChangeEmail(it)) }
+                        }
 
-                        onTextChange = { actions.accept(Action.ChangePassword(it)) }
-                    }
+                        EditText {
+                            layoutParams = LinearLayout.LayoutParams.create(
+                                width = LayoutParams.Size.MatchParent,
+                                height = LayoutParams.Size.WrapContent,
+                                gravity = LinearLayout.LayoutParams.Gravity.CENTER_HORIZONTAL
+                            )
+                            text = state.password
 
-                    Button {
-                        layoutParams = LinearLayout.LayoutParams.create(
-                            width = LayoutParams.Size.WrapContent,
-                            height = LayoutParams.Size.WrapContent,
-                            gravity = LinearLayout.LayoutParams.Gravity.CENTER_HORIZONTAL
-                        )
-                        style = R.attr.buttonStyle
+                            onTextChange = { actions.accept(Action.ChangePassword(it)) }
+                        }
 
-                        text = "Sign In"
-                        enabled = state.signInButtonEnabled
+                        Button {
+                            layoutParams = LinearLayout.LayoutParams.create(
+                                width = LayoutParams.Size.WrapContent,
+                                height = LayoutParams.Size.WrapContent,
+                                gravity = LinearLayout.LayoutParams.Gravity.CENTER_HORIZONTAL
+                            )
+                            style = R.attr.buttonStyle
 
-                        onClick = { actions.accept(Action.SignIn) }
-                    }
+                            text = "Sign In"
+                            enabled = state.signInButtonEnabled
 
-                    TextView {
-                        text = when (state) {
-                            is State.Idle -> ""
-                            is State.SigningIn -> "Signing in…"
-                            is State.SignInSuccessful -> "Successfully signed in!"
-                            is State.SignInFailed -> "Couldn't sign in because ${state.cause.message}"
+                            onClick = { actions.accept(Action.SignIn) }
+                        }
+
+                        TextView {
+                            text = when (state) {
+                                is State.Idle -> ""
+                                is State.SigningIn -> "Signing in…"
+                                is State.SignInSuccessful -> "Successfully signed in!"
+                                is State.SignInFailed -> "Couldn't sign in because ${state.cause.message}"
+                            }
                         }
                     }
-                }
-            }.build()
-        }
-        .observeOn(AndroidSchedulers.mainThread())
-        .subscribe { adapter.setComponents(it) }
+                }.build()
+            }
+            .mergeWith(share.ofType(State.SignInSuccessful::class.java).observeOn(AndroidSchedulers.mainThread()).flatMap {
+                context.startActivity(Intent(context, FeedActivity::class.java))
+                Observable.empty<List<BaseComponent<out com.pushtorefresh.redom.api.View, out Any>>>()
+            })
+            .observeOn(AndroidSchedulers.mainThread())
+            .subscribe { adapter.setComponents(it) }
+    }
 
 }

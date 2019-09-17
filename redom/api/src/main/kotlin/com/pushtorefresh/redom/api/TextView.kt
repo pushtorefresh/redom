@@ -2,9 +2,18 @@
 
 package com.pushtorefresh.redom.api
 
+import java.util.*
+
 @Dom.RootDsl
 interface TextView : View {
+    enum class Gravity {
+        Top,
+        Bottom,
+        Right,
+        Left
+    }
     var text: CharSequence
+    var gravity: EnumSet<Gravity>
     var onTextChange: ((CharSequence) -> Unit)?
 }
 
