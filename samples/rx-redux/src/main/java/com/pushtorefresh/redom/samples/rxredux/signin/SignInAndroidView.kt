@@ -1,7 +1,6 @@
 package com.pushtorefresh.redom.samples.rxredux.signin
 
 import android.content.Context
-import android.content.Intent
 import android.util.Log
 import android.view.View
 import android.view.ViewGroup
@@ -13,7 +12,6 @@ import com.pushtorefresh.redom.android.recycler.Adapter
 import com.pushtorefresh.redom.android.recycler.AndroidLayoutParamsFactory
 import com.pushtorefresh.redom.android.recycler.Inflater
 import com.pushtorefresh.redom.android.recycler.ViewTypeRegistryImpl
-import com.pushtorefresh.redom.api.BaseComponent
 import com.pushtorefresh.redom.api.Button
 import com.pushtorefresh.redom.api.EditText
 import com.pushtorefresh.redom.api.LayoutParams
@@ -21,7 +19,6 @@ import com.pushtorefresh.redom.api.LinearLayout
 import com.pushtorefresh.redom.api.LinearLayout.Orientation
 import com.pushtorefresh.redom.api.TextView
 import com.pushtorefresh.redom.samples.rxredux.R
-import com.pushtorefresh.redom.samples.rxredux.feed.FeedActivity
 import com.pushtorefresh.redom.samples.rxredux.signin.SignInStateMachine.Action
 import com.pushtorefresh.redom.samples.rxredux.signin.SignInStateMachine.State
 import io.reactivex.Observable
@@ -55,11 +52,8 @@ class SignInAndroidView(root: ViewGroup) : SignInView {
     override val actions = PublishRelay.create<Action>()
 
     override fun render(stateStream: Observable<State>): Disposable {
-        val share = stateStream.share()
-
-        return share
+        return stateStream
             .observeOn(Schedulers.computation())
-            .filter { it !is State.SignInSuccessful }
             .map { state ->
                 androidDom {
                     LinearLayout {
@@ -117,10 +111,6 @@ class SignInAndroidView(root: ViewGroup) : SignInView {
                     }
                 }.build()
             }
-            .mergeWith(share.ofType(State.SignInSuccessful::class.java).observeOn(AndroidSchedulers.mainThread()).flatMap {
-                context.startActivity(Intent(context, FeedActivity::class.java))
-                Observable.empty<List<BaseComponent<out com.pushtorefresh.redom.api.View, out Any>>>()
-            })
             .observeOn(AndroidSchedulers.mainThread())
             .subscribe { adapter.setComponents(it) }
     }

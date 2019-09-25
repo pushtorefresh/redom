@@ -1,15 +1,15 @@
 package com.pushtorefresh.redom.samples.rxredux.signin
 
-import com.freeletics.rxredux.StateAccessor
+import com.freeletics.rxredux.SideEffect
 import com.freeletics.rxredux.reduxStore
 import io.reactivex.Observable
 import io.reactivex.Scheduler
-import io.reactivex.rxkotlin.ofType
 
 class SignInStateMachine(
     inputActions: Observable<Action>,
-    private val signInService: SignInService,
-    computationScheduler: Scheduler
+    sideEffects: List<SideEffect<State, Action>>,
+    initialState: State = State.Idle(email = "", password = "", signInButtonEnabled = false),
+    reduxLoopScheduler: Scheduler
 ) {
 
     sealed class Action {
@@ -56,6 +56,18 @@ class SignInStateMachine(
     }
 
 
+    val state: Observable<State> = inputActions
+        .observeOn(reduxLoopScheduler)
+        .distinctUntilChanged()
+        .doOnNext { println("~~~ action = $it") }
+        .reduxStore(
+            initialState = initialState,
+            sideEffects = sideEffects,
+            reducer = ::reducer
+        )
+        .distinctUntilChanged()
+        .doOnNext { println("~~~ state = $it") }
+
     private fun reducer(state: State, action: Action): State = when (action) {
         is Action.ChangeEmail -> {
             val email = action.email.trim()
@@ -99,32 +111,6 @@ class SignInStateMachine(
         )
     }
 
-    val state: Observable<State> = inputActions
-        .observeOn(computationScheduler)
-        .distinctUntilChanged()
-        .doOnNext { println("~~~ action = $it") }
-        .reduxStore(
-            initialState = State.Idle(email = "", password = "", signInButtonEnabled = false),
-            sideEffects = listOf(::signInSideEffect),
-            reducer = ::reducer
-        )
-        .distinctUntilChanged()
-        .doOnNext { println("~~~ state = $it") }
-
-    private fun validateEmailAndPassword(email: CharSequence, password: CharSequence): Boolean = email.isNotEmpty() && password.isNotEmpty()
-
-    private fun signInSideEffect(actions: Observable<Action>, state: StateAccessor<State>): Observable<Action> = actions
-        .ofType<Action.SignIn>()
-        .map { state() }
-        .map { SignInService.Credentials(email = it.email, password = it.password) }
-        .switchMap { credentials ->
-            signInService
-                .signIn(credentials)
-                .map { result ->
-                    when (result) {
-                        is SignInService.SignInResult.Success -> Action.SignInSuccessful
-                        is SignInService.SignInResult.Error -> Action.SignInFailed(result.cause)
-                    }
-                }
-        }
+    private fun validateEmailAndPassword(email: CharSequence, password: CharSequence): Boolean =
+        email.isNotEmpty() && password.isNotEmpty()
 }
