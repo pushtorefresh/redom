@@ -10,7 +10,10 @@ interface TextView : View {
         Top,
         Bottom,
         Right,
-        Left
+        Left,
+        CenterVertical,
+        CenterHorizontal,
+        Center
     }
     var text: CharSequence
     var gravity: EnumSet<Gravity>
