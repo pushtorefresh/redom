@@ -13,6 +13,7 @@ import com.pushtorefresh.redom.android.recycler.AndroidLayoutParamsFactory
 import com.pushtorefresh.redom.android.recycler.Inflater
 import com.pushtorefresh.redom.android.recycler.ViewTypeRegistryImpl
 import com.pushtorefresh.redom.api.Button
+import com.pushtorefresh.redom.api.ConstraintLayout
 import com.pushtorefresh.redom.api.ImageView
 import com.pushtorefresh.redom.api.LayoutParams
 import com.pushtorefresh.redom.api.LinearLayout
@@ -41,57 +42,60 @@ class FeedActivity : AppCompatActivity() {
         root.findViewById<ViewGroup>(android.R.id.content).addView(recyclerView)
 
         val dom = androidDom {
-            LinearLayout {
-                layoutParams = LayoutParams.create(
-                    width = LayoutParams.Size.MatchParent, // TODO без этого неочевидно и работало по другому
-                    height = LayoutParams.Size.WrapContent
-                )
-                LinearLayout {
-                    orientation = LinearLayout.Orientation.Horizontal
-                    layoutParams = LinearLayout.LayoutParams.create(
-                        width = LayoutParams.Size.MatchParent,
-                        height = LayoutParams.Size.WrapContent
-                    )
-                    TextView {
-                        text = "Very super-duper long text"
-                        layoutParams = LinearLayout.LayoutParams.create(
-                            weight = 1F,
-                            width = LayoutParams.Size.WrapContent,
-                            height = LayoutParams.Size.WrapContent
-                        )
-                    }
-                    TextView {
-                        text = "Short text"
-                        gravity = EnumSet.of(TextView.Gravity.Right)
-                        layoutParams = LinearLayout.LayoutParams.create(
-                            weight = 1F,
-                            width = LayoutParams.Size.WrapContent,
-                            height = LayoutParams.Size.WrapContent
-                        )
-                    }
-                }
-                ImageView {
+            ConstraintLayout {
 
-                }
                 LinearLayout {
-                    orientation = LinearLayout.Orientation.Horizontal
-                    layoutParams = LinearLayout.LayoutParams.create(
-                        width = LayoutParams.Size.MatchParent,
+                    layoutParams = ConstraintLayout.LayoutParams.create(
+                        width = LayoutParams.Size.MatchParent, // TODO без этого неочевидно и работало по другому
                         height = LayoutParams.Size.WrapContent
                     )
-                    Button {
-//                        image = TODO()
+                    LinearLayout {
+                        orientation = LinearLayout.Orientation.Horizontal
+                        layoutParams = ConstraintLayout.LayoutParams.create(
+                            width = LayoutParams.Size.MatchParent,
+                            height = LayoutParams.Size.WrapContent
+                        )
+                        TextView {
+                            text = "Very super-duper long text"
+                            layoutParams = LinearLayout.LayoutParams.create(
+                                weight = 1F,
+                                width = LayoutParams.Size.WrapContent,
+                                height = LayoutParams.Size.WrapContent
+                            )
+                        }
+                        TextView {
+                            text = "Short text"
+                            gravity = EnumSet.of(TextView.Gravity.Right)
+                            layoutParams = LinearLayout.LayoutParams.create(
+                                weight = 1F,
+                                width = LayoutParams.Size.WrapContent,
+                                height = LayoutParams.Size.WrapContent
+                            )
+                        }
                     }
                     ImageView {
 
                     }
-                    TextView {
-                        text = "Some text"
+                    LinearLayout {
+                        orientation = LinearLayout.Orientation.Horizontal
                         layoutParams = LinearLayout.LayoutParams.create(
-                            weight = 1F,
-                            width = LayoutParams.Size.WrapContent,
+                            width = LayoutParams.Size.MatchParent,
                             height = LayoutParams.Size.WrapContent
                         )
+                        Button {
+                            //                        image = TODO()
+                        }
+                        ImageView {
+
+                        }
+                        TextView {
+                            text = "Some text"
+                            layoutParams = LinearLayout.LayoutParams.create(
+                                weight = 1F,
+                                width = LayoutParams.Size.WrapContent,
+                                height = LayoutParams.Size.WrapContent
+                            )
+                        }
                     }
                 }
             }

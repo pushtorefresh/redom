@@ -38,9 +38,11 @@ ext.libraries = [
 ]
 
 ext.androidXLibraries = [
-        annotations : "androidx.annotation:annotation:$versions.androidx",
-        appCompat   : "androidx.appcompat:appcompat:$versions.androidx",
-        recyclerView: "androidx.recyclerview:recyclerview:$versions.androidx",
+        annotations     : "androidx.annotation:annotation:$versions.androidx",
+        appCompat       : "androidx.appcompat:appcompat:$versions.androidx",
+        core            : "androidx.core:core:1.0.0",
+        recyclerView    : "androidx.recyclerview:recyclerview:$versions.androidx",
+        constraintLayout: "androidx.constraintlayout:constraintlayout:2.0.0-beta2",
 ]
 
 ext.testLibraries = [
