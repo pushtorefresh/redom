@@ -26,6 +26,7 @@ dependencies {
     api androidXLibraries.recyclerView
     implementation androidXLibraries.appCompat
     implementation androidLibraries.glide
+    implementation androidXLibraries.constraintLayout
     implementation libraries.rxAndroid
     implementation libraries.rxBinding
     implementation libraries.rxReplayingShareKotlin

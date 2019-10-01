@@ -3,15 +3,12 @@ package com.pushtorefresh.redom.android.view
 import com.pushtorefresh.redom.api.BaseComponent
 import com.pushtorefresh.redom.api.Binding
 import com.pushtorefresh.redom.api.ComponentGroup
+import com.pushtorefresh.redom.api.ConstraintLayout
 import com.pushtorefresh.redom.api.IdRegistry
-import com.pushtorefresh.redom.api.LinearLayout
-import com.pushtorefresh.redom.api.LinearLayout.Orientation.Horizontal
-import com.pushtorefresh.redom.api.LinearLayout.Orientation.Vertical
 import com.pushtorefresh.redom.api.View
 import com.pushtorefresh.redom.api.ViewParent
 
-class LinearLayoutImpl(private val viewParent: ViewParent) : LinearLayout, ViewImpl() {
-    override var orientation = LinearLayout.Orientation.Vertical
+class ConstraintLayoutImpl(private val viewParent: ViewParent) : ConstraintLayout, ViewImpl() {
 
     private val views = mutableListOf<View>()
 
@@ -19,33 +16,29 @@ class LinearLayoutImpl(private val viewParent: ViewParent) : LinearLayout, ViewI
         return viewParent.createView(clazz).also { views += it }
     }
 
-    override fun build(): BaseComponent<*, *> {
+    override fun build(): BaseComponent<out View, out Any> {
         val children = views.map { it.build() }
         return ComponentGroup(
-            binder = ::bindLinearLayout,
+            binder = ::bindConstraintLayout,
             dslView = this,
-            clazz = LinearLayout::class.java,
+            clazz = ConstraintLayout::class.java,
             children = children
         )
     }
 }
 
-fun bindLinearLayout(
-    dslView: LinearLayout,
-    view: android.widget.LinearLayout,
+fun bindConstraintLayout(
+    dslView: ConstraintLayout,
+    view: androidx.constraintlayout.widget.ConstraintLayout,
     idRegistry: IdRegistry<String>,
     children: List<BaseComponent<*, *>>
 ): Binding {
     val bindView = bindView(dslView, view, idRegistry)
-    view.orientation = when (dslView.orientation) {
-        Horizontal -> android.widget.LinearLayout.HORIZONTAL
-        Vertical -> android.widget.LinearLayout.VERTICAL
-    }
     val childrenBindings = children.mapIndexed { index, childComponent ->
         @Suppress("UNCHECKED_CAST")
         (childComponent as BaseComponent<View, android.view.View>).bind(view.getChildAt(index), idRegistry)
     }
-    return object : Binding {
+    return object: Binding {
         override fun unbind() {
             childrenBindings.forEach(Binding::unbind)
             bindView.unbind()

@@ -3,11 +3,13 @@ package com.pushtorefresh.redom.android.recycler
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.pushtorefresh.redom.api.BaseComponent
+import com.pushtorefresh.redom.api.IdRegistry
 import com.pushtorefresh.redom.api.View
 import com.pushtorefresh.redom.api.ViewStructure
 
 class Adapter(
     private val viewTypeRegistry: ViewTypeRegistry,
+    private val idRegistry: IdRegistry<String>,
     private val inflater: (ViewStructure, parent: ViewGroup) -> android.view.View
 ) : RecyclerView.Adapter<ComponentViewHolder>() {
 
@@ -24,11 +26,11 @@ class Adapter(
     override fun getItemViewType(position: Int) = viewTypeRegistry.viewTypeOf(components[position])
 
     override fun getItemId(position: Int): Long {
-        return "$position-${getItemViewType(position)}".hashCode().toLong() // TODO revisit zalupa with Vova
+        return "$position-${getItemViewType(position)}".hashCode().toLong()
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ComponentViewHolder =
-        ComponentViewHolder(inflater(viewTypeRegistry.viewTreeOf(viewType), parent))
+        ComponentViewHolder(inflater(viewTypeRegistry.viewTreeOf(viewType), parent), idRegistry)
 
     override fun onBindViewHolder(holder: ComponentViewHolder, position: Int) {
         @Suppress("UNCHECKED_CAST")

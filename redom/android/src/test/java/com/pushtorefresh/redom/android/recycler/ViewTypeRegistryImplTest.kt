@@ -1,5 +1,6 @@
 package com.pushtorefresh.redom.android.recycler
 
+import com.nhaarman.mockito_kotlin.mock
 import com.pushtorefresh.redom.api.LinearLayout
 import com.pushtorefresh.redom.api.TextView
 import com.pushtorefresh.redom.testutil.createComponent
@@ -49,7 +50,8 @@ class ViewTypeRegistryImplTest {
                 children = listOf(
                     createComponent(TextView::class.java),
                     createComponent(TextView::class.java)
-                )
+                ),
+                idRegistry = mock()
             )
         )
 
@@ -66,7 +68,8 @@ class ViewTypeRegistryImplTest {
             children = listOf(
                 createComponent(TextView::class.java),
                 createComponent(TextView::class.java)
-            )
+            ),
+            idRegistry = mock()
         )
         val viewType2 = viewTypeRegistry.viewTypeOf(componentGroup)
         val viewType3 = viewTypeRegistry.viewTypeOf(componentGroup)
@@ -86,7 +89,8 @@ class ViewTypeRegistryImplTest {
                 children = listOf(
                     createComponent(TextView::class.java),
                     createComponent(TextView::class.java)
-                )
+                ),
+                idRegistry = mock()
             )
         )
         val viewType3 = viewTypeRegistry.viewTypeOf(
@@ -94,7 +98,8 @@ class ViewTypeRegistryImplTest {
                 LinearLayout::class.java,
                 children = listOf(
                     createComponent(TextView::class.java)
-                )
+                ),
+                idRegistry = mock()
             )
         )
 

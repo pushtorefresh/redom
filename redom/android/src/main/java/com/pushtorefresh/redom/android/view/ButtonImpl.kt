@@ -11,6 +11,7 @@ import com.pushtorefresh.redom.api.Binding
 import com.pushtorefresh.redom.api.Button
 import com.pushtorefresh.redom.api.Component
 import com.pushtorefresh.redom.api.ImageView
+import com.pushtorefresh.redom.api.IdRegistry
 
 open class ButtonImpl : Button, TextViewImpl() {
     override var background: ImageView.Drawable? = null
@@ -23,9 +24,8 @@ open class ButtonImpl : Button, TextViewImpl() {
         )
     }
 }
-
-fun bindButton(dslView: Button, view: android.widget.Button): Binding {
-    val bindTextView = bindTextView(dslView, view)
+fun bindButton(dslView: Button, view: android.widget.Button, idRegistry: IdRegistry<String>): Binding {
+    val bindTextView = bindTextView(dslView, view, idRegistry)
     val imageFuture = dslView.background?.let { drawable ->
         Glide.with(view)
             .createImageRequest(drawable)

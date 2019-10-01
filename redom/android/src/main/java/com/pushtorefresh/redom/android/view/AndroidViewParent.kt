@@ -2,6 +2,7 @@ package com.pushtorefresh.redom.android.view
 
 import com.pushtorefresh.redom.api.Button
 import com.pushtorefresh.redom.api.CheckBox
+import com.pushtorefresh.redom.api.ConstraintLayout
 import com.pushtorefresh.redom.api.EditText
 import com.pushtorefresh.redom.api.ImageView
 import com.pushtorefresh.redom.api.LinearLayout
@@ -21,6 +22,7 @@ class AndroidViewParent : ViewParent {
             CheckBox::class.java -> CheckBoxImpl() as V
             EditText::class.java -> EditTextImpl() as V
             ImageView::class.java -> ImageViewImpl() as V
+            ConstraintLayout::class.java -> ConstraintLayoutImpl(this) as V
             else -> throw IllegalArgumentException("Unsupported $clazz")
         }
     }

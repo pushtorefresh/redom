@@ -6,6 +6,7 @@ import android.view.Gravity
 import com.pushtorefresh.redom.api.BaseComponent
 import com.pushtorefresh.redom.api.Binding
 import com.pushtorefresh.redom.api.Component
+import com.pushtorefresh.redom.api.IdRegistry
 import com.pushtorefresh.redom.api.TextView
 import java.util.*
 
@@ -24,8 +25,8 @@ open class TextViewImpl : TextView, ViewImpl() {
 
 }
 
-fun bindTextView(dslText: TextView, textView: android.widget.TextView): Binding {
-    val viewBinding = bindView(dslText, textView)
+fun bindTextView(dslText: TextView, textView: android.widget.TextView, idRegistry: IdRegistry<String>): Binding {
+    val viewBinding = bindView(dslText, textView, idRegistry)
 
     if (textView.text.toString() != dslText.text) {
         // TODO do it with Domic-like diffing
