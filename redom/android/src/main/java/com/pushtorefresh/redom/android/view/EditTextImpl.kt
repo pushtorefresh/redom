@@ -3,8 +3,8 @@ package com.pushtorefresh.redom.android.view
 import com.pushtorefresh.redom.api.BaseComponent
 import com.pushtorefresh.redom.api.Binding
 import com.pushtorefresh.redom.api.Component
+import com.pushtorefresh.redom.api.ComponentContext
 import com.pushtorefresh.redom.api.EditText
-import com.pushtorefresh.redom.api.IdRegistry
 
 class EditTextImpl : EditText, TextViewImpl() {
 
@@ -17,6 +17,6 @@ class EditTextImpl : EditText, TextViewImpl() {
     }
 }
 
-fun bindEditText(dslView: EditText, view: android.widget.EditText, idRegistry: IdRegistry<String>): Binding {
-    return bindTextView(dslView, view, idRegistry)
+fun bindEditText(dslView: EditText, view: android.widget.EditText, componentContext: ComponentContext): Binding {
+    return bindTextView(dslView, view, componentContext)
 }

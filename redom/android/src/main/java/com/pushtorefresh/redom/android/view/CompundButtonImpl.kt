@@ -4,8 +4,8 @@ import com.pushtorefresh.redom.api.BaseComponent
 import com.pushtorefresh.redom.api.Binding
 import com.pushtorefresh.redom.api.CheckBox
 import com.pushtorefresh.redom.api.Component
+import com.pushtorefresh.redom.api.ComponentContext
 import com.pushtorefresh.redom.api.CompoundButton
-import com.pushtorefresh.redom.api.IdRegistry
 import com.pushtorefresh.redom.api.Switch
 
 abstract class CompundButtonImpl : ButtonImpl(), CompoundButton {
@@ -24,8 +24,12 @@ abstract class CompundButtonImpl : ButtonImpl(), CompoundButton {
     abstract fun getCompoundClass(): Class<out CompoundButton>
 }
 
-fun bindCompoundButton(dslView: CompoundButton, view: android.widget.CompoundButton, idRegistry: IdRegistry<String>): Binding {
-    val bindButton = bindButton(dslView, view, idRegistry)
+fun bindCompoundButton(
+    dslView: CompoundButton,
+    view: android.widget.CompoundButton,
+    componentContext: ComponentContext
+): Binding {
+    val bindButton = bindButton(dslView, view, componentContext)
     view.isChecked = dslView.checked
 
     val onCheckedChangeListener = dslView.onCheckedChange?.let {

@@ -8,6 +8,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.pushtorefresh.redom.android.AndroidIdRegistry
+import com.pushtorefresh.redom.android.GlideImageLoader
 import com.pushtorefresh.redom.android.androidDom
 import com.pushtorefresh.redom.android.recycler.Adapter
 import com.pushtorefresh.redom.android.recycler.AndroidLayoutParamsFactory
@@ -29,8 +30,12 @@ class FeedActivity : AppCompatActivity() {
         val root = findViewById<ViewGroup>(android.R.id.content)
         val recyclerView = RecyclerView(root.context)
         val idRegistry = AndroidIdRegistry<String>()
-        val adapter =
-            Adapter(ViewTypeRegistryImpl(), idRegistry, Inflater(AndroidLayoutParamsFactory(root.context, idRegistry)))
+        val adapter = Adapter(
+            viewTypeRegistry = ViewTypeRegistryImpl(),
+            inflater = Inflater(AndroidLayoutParamsFactory(root.context, idRegistry)),
+            idRegistry = idRegistry,
+            imageLoader = GlideImageLoader(this)
+        )
         recyclerView.adapter = adapter
         recyclerView.layoutManager = LinearLayoutManager(root.context)
         recyclerView.addOnChildAttachStateChangeListener(object : RecyclerView.OnChildAttachStateChangeListener {
