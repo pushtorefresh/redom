@@ -1,5 +1,6 @@
 package com.pushtorefresh.redom.android.recycler
 
+import android.annotation.SuppressLint
 import android.content.Context
 import android.util.TypedValue
 import android.view.Gravity
@@ -43,6 +44,7 @@ class AndroidLayoutParamsFactory(
     ): LinearLayout.LayoutParams {
         val width: Int = layoutParams.width.toAndroid()
         val height: Int = layoutParams.height.toAndroid()
+        @SuppressLint("RtlHardcoded")
         val gravity = when (layoutParams.gravity) {
             com.pushtorefresh.redom.api.LinearLayout.LayoutParams.Gravity.NO_GRAVITY -> Gravity.NO_GRAVITY
             com.pushtorefresh.redom.api.LinearLayout.LayoutParams.Gravity.TOP -> Gravity.TOP
