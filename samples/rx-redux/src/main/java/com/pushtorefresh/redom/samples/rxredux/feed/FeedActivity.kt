@@ -28,7 +28,9 @@ class FeedActivity : AppCompatActivity() {
         setContentView(R.layout.activity_feed)
         val root = findViewById<ViewGroup>(android.R.id.content)
         val recyclerView = RecyclerView(root.context)
-        val adapter = Adapter(ViewTypeRegistryImpl(), AndroidIdRegistry(), Inflater(AndroidLayoutParamsFactory(root.context)))
+        val idRegistry = AndroidIdRegistry<String>()
+        val adapter =
+            Adapter(ViewTypeRegistryImpl(), idRegistry, Inflater(AndroidLayoutParamsFactory(root.context, idRegistry)))
         recyclerView.adapter = adapter
         recyclerView.layoutManager = LinearLayoutManager(root.context)
         recyclerView.addOnChildAttachStateChangeListener(object : RecyclerView.OnChildAttachStateChangeListener {
@@ -44,60 +46,65 @@ class FeedActivity : AppCompatActivity() {
 
         val dom = androidDom {
             ConstraintLayout {
+                id = "root"
+
+                layoutParams = ConstraintLayout.LayoutParams.create(
+                    width = LayoutParams.Size.MatchParent,
+                    height = LayoutParams.Size.MatchParent
+                )
 
                 LinearLayout {
-                    id = "ll"
+                    id = "textContainer"
+                    orientation = LinearLayout.Orientation.Horizontal
                     layoutParams = ConstraintLayout.LayoutParams.create(
-                        width = LayoutParams.Size.MatchParent, // TODO без этого неочевидно и работало по другому
-                        height = LayoutParams.Size.WrapContent
+                        width = LayoutParams.Size.MatchParent,
+                        height = LayoutParams.Size.WrapContent,
+                        topToTop = "root"
                     )
-                    LinearLayout {
-                        orientation = LinearLayout.Orientation.Horizontal
-                        layoutParams = ConstraintLayout.LayoutParams.create(
-                            width = LayoutParams.Size.MatchParent,
-                            height = LayoutParams.Size.WrapContent
+
+                    TextView {
+                        text = "Very super-duper long text"
+                        layoutParams = LinearLayout.LayoutParams.create(
+                            width = LayoutParams.Size.WrapContent,
+                            height = LayoutParams.Size.WrapContent,
+                            weight = 1F
                         )
-                        TextView {
-                            text = "Very super-duper long text"
-                            layoutParams = LinearLayout.LayoutParams.create(
-                                weight = 1F,
-                                width = LayoutParams.Size.WrapContent,
-                                height = LayoutParams.Size.WrapContent
-                            )
-                        }
-                        TextView {
-                            text = "Short text"
-                            gravity = EnumSet.of(TextView.Gravity.Right)
-                            layoutParams = LinearLayout.LayoutParams.create(
-                                weight = 1F,
-                                width = LayoutParams.Size.WrapContent,
-                                height = LayoutParams.Size.WrapContent
-                            )
-                        }
+                    }
+                    TextView {
+                        text = "Short text"
+                        gravity = EnumSet.of(TextView.Gravity.Right)
+                        layoutParams = LinearLayout.LayoutParams.create(
+                            width = LayoutParams.Size.WrapContent,
+                            height = LayoutParams.Size.WrapContent,
+                            weight = 1F
+                        )
+                    }
+                }
+                ImageView {
+                    id = "image"
+                    layoutParams = ConstraintLayout.LayoutParams.create(
+                        topToBottom = "textContainer"
+                    )
+                }
+                LinearLayout {
+                    orientation = LinearLayout.Orientation.Horizontal
+                    layoutParams = ConstraintLayout.LayoutParams.create(
+                        width = LayoutParams.Size.MatchParent,
+                        height = LayoutParams.Size.WrapContent,
+                        topToBottom = "image"
+                    )
+                    Button {
+                        //                        image = TODO()
                     }
                     ImageView {
 
                     }
-                    LinearLayout {
-                        orientation = LinearLayout.Orientation.Horizontal
+                    TextView {
+                        text = "Some text"
                         layoutParams = LinearLayout.LayoutParams.create(
-                            width = LayoutParams.Size.MatchParent,
+                            width = LayoutParams.Size.WrapContent,
                             height = LayoutParams.Size.WrapContent
                         )
-                        Button {
-                            //                        image = TODO()
-                        }
-                        ImageView {
-
-                        }
-                        TextView {
-                            text = "Some text"
-                            layoutParams = LinearLayout.LayoutParams.create(
-                                weight = 1F,
-                                width = LayoutParams.Size.WrapContent,
-                                height = LayoutParams.Size.WrapContent
-                            )
-                        }
                     }
                 }
             }

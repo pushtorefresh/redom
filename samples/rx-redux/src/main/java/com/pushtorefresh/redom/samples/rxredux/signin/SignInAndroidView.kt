@@ -35,7 +35,8 @@ class SignInAndroidView(root: ViewGroup) : SignInView {
     init {
         context = root.context
         val recyclerView = RecyclerView(root.context)
-        adapter = Adapter(ViewTypeRegistryImpl(), AndroidIdRegistry(), Inflater(AndroidLayoutParamsFactory(root.context)))
+        val idRegistry = AndroidIdRegistry<String>()
+        adapter = Adapter(ViewTypeRegistryImpl(), idRegistry, Inflater(AndroidLayoutParamsFactory(root.context, idRegistry)))
         recyclerView.adapter = adapter
         recyclerView.layoutManager = LinearLayoutManager(root.context)
         recyclerView.addOnChildAttachStateChangeListener(object : RecyclerView.OnChildAttachStateChangeListener {

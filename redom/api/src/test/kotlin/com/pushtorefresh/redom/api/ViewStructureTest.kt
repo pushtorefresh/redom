@@ -1,5 +1,6 @@
 package com.pushtorefresh.redom.api
 
+import com.nhaarman.mockito_kotlin.mock
 import com.pushtorefresh.redom.testutil.createComponent
 import com.pushtorefresh.redom.testutil.createComponentGroup
 import org.assertj.core.api.Assertions.assertThat
@@ -16,7 +17,7 @@ class ViewStructureTest {
 
     @Test
     fun toViewStructure_LinearLayoutNoChildren() {
-        val textView = createComponentGroup(LinearLayout::class.java, children = emptyList())
+        val textView = createComponentGroup(LinearLayout::class.java, children = emptyList(), idRegistry = mock())
 
         assertThat(textView.viewStructure).isEqualTo(
             ViewStructure.ViewGroup(
@@ -32,7 +33,8 @@ class ViewStructureTest {
     fun toViewStructure_LinearLayoutTextView() {
         val textView = createComponentGroup(
             LinearLayout::class.java,
-            children = listOf(createComponent(TextView::class.java))
+            children = listOf(createComponent(TextView::class.java)),
+            idRegistry = mock()
         )
 
         assertThat(textView.viewStructure).isEqualTo(
@@ -51,8 +53,9 @@ class ViewStructureTest {
             LinearLayout::class.java,
             children = listOf(
                 createComponent(TextView::class.java),
-                createComponentGroup(LinearLayout::class.java, children = emptyList())
-            )
+                createComponentGroup(LinearLayout::class.java, children = emptyList(), idRegistry = mock())
+            ),
+            idRegistry = mock()
         )
 
         assertThat(textView.viewStructure).isEqualTo(
@@ -60,7 +63,12 @@ class ViewStructureTest {
                 LinearLayout::class.java,
                 children = listOf(
                     ViewStructure.View(TextView::class.java, null, null),
-                    ViewStructure.ViewGroup(LinearLayout::class.java, children = emptyList(), style = null, layoutParams = null)
+                    ViewStructure.ViewGroup(
+                        LinearLayout::class.java,
+                        children = emptyList(),
+                        style = null,
+                        layoutParams = null
+                    )
                 ),
                 style = null,
                 layoutParams = null
