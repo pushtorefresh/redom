@@ -71,7 +71,17 @@ class FeedActivity : AppCompatActivity() {
                     }
                 }
                 ImageView {
-
+                    layoutParams = LinearLayout.LayoutParams.create(
+                        width = LayoutParams.Size.MatchParent,
+                        height = LayoutParams.Size.Scalar.Dp(100),
+                        marginStart = LayoutParams.Size.Scalar.Dp(24),
+                        marginEnd = LayoutParams.Size.Scalar.Dp(24)
+                    )
+                    drawable = ImageView.Drawable.Http(
+                        url = "https://www.cbronline.com/wp-content/uploads/2016/06/what-is-URL-770x503.jpg",
+                        placeholderId = R.drawable.test,
+                        scaleType = ImageView.ScaleType.CenterCrop
+                    )
                 }
                 LinearLayout {
                     orientation = LinearLayout.Orientation.Horizontal
@@ -80,7 +90,11 @@ class FeedActivity : AppCompatActivity() {
                         height = LayoutParams.Size.WrapContent
                     )
                     Button {
-//                        image = TODO()
+                        background = ImageView.Drawable.Http(
+                            url = "https://www.cbronline.com/wp-content/uploads/2016/06/what-is-URL-770x503.jpg",
+                            placeholderId = R.drawable.test,
+                            scaleType = ImageView.ScaleType.FitCenter
+                        )
                     }
                     ImageView {
 
