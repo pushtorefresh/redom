@@ -11,7 +11,7 @@ import com.pushtorefresh.redom.api.TextView
 import java.util.*
 
 open class TextViewImpl : TextView, ViewImpl() {
-    override var gravity = EnumSet.of(TextView.Gravity.Top, TextView.Gravity.Left)
+    override var gravity = EnumSet.noneOf(TextView.Gravity::class.java)
     override var text: CharSequence = ""
     override var onTextChange: ((CharSequence) -> Unit)? = null
 
@@ -32,16 +32,22 @@ fun bindTextView(dslText: TextView, textView: android.widget.TextView, idRegistr
         // TODO do it with Domic-like diffing
         textView.text = dslText.text
     }
-    val gravity = dslText.gravity.map {
-        @Suppress("WHEN_ENUM_CAN_BE_NULL_IN_JAVA")
-        when (it) {
-            TextView.Gravity.Left -> Gravity.LEFT
-            TextView.Gravity.Right -> Gravity.RIGHT
-            TextView.Gravity.Top -> Gravity.TOP
-            TextView.Gravity.Bottom -> Gravity.BOTTOM
-        }
-    }.reduce { acc, i -> acc or i }
-    textView.gravity = gravity
+
+    if (dslText.gravity.isNotEmpty()) {
+        val gravity = dslText.gravity.map {
+            @Suppress("WHEN_ENUM_CAN_BE_NULL_IN_JAVA")
+            when (it) {
+                TextView.Gravity.Left -> Gravity.LEFT
+                TextView.Gravity.Right -> Gravity.RIGHT
+                TextView.Gravity.Top -> Gravity.TOP
+                TextView.Gravity.Bottom -> Gravity.BOTTOM
+                TextView.Gravity.CenterVertical -> Gravity.CENTER_VERTICAL
+                TextView.Gravity.CenterHorizontal -> Gravity.CENTER_HORIZONTAL
+                TextView.Gravity.Center -> Gravity.CENTER
+            }
+        }.reduce { acc, i -> acc or i }
+        textView.gravity = gravity
+    }
     val textWatcher = dslText.onTextChange?.let {
         object : TextWatcher {
             override fun afterTextChanged(s: Editable) {

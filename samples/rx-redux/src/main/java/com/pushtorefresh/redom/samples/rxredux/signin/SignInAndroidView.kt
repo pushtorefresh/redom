@@ -26,6 +26,7 @@ import io.reactivex.Observable
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.Disposable
 import io.reactivex.schedulers.Schedulers
+import java.util.*
 
 class SignInAndroidView(root: ViewGroup) : SignInView {
 
@@ -80,9 +81,10 @@ class SignInAndroidView(root: ViewGroup) : SignInView {
                         EditText {
                             layoutParams = LinearLayout.LayoutParams.create(
                                 width = LayoutParams.Size.MatchParent,
-                                height = LayoutParams.Size.WrapContent,
+                                height = LayoutParams.Size.Scalar.Dp(100),
                                 gravity = LinearLayout.LayoutParams.Gravity.CENTER_HORIZONTAL
                             )
+                            gravity = EnumSet.of(TextView.Gravity.CenterHorizontal)
                             text = state.password
 
                             onTextChange = { actions.accept(Action.ChangePassword(it)) }
@@ -98,7 +100,6 @@ class SignInAndroidView(root: ViewGroup) : SignInView {
 
                             text = "Sign In"
                             enabled = state.signInButtonEnabled
-
                             onClick = { actions.accept(Action.SignIn) }
                         }
 
