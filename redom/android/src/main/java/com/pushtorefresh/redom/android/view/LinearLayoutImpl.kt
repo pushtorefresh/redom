@@ -3,6 +3,7 @@ package com.pushtorefresh.redom.android.view
 import com.pushtorefresh.redom.api.BaseComponent
 import com.pushtorefresh.redom.api.Binding
 import com.pushtorefresh.redom.api.ComponentGroup
+import com.pushtorefresh.redom.api.IdRegistry
 import com.pushtorefresh.redom.api.LinearLayout
 import com.pushtorefresh.redom.api.LinearLayout.Orientation.Horizontal
 import com.pushtorefresh.redom.api.LinearLayout.Orientation.Vertical
@@ -32,16 +33,17 @@ class LinearLayoutImpl(private val viewParent: ViewParent) : LinearLayout, ViewI
 fun bindLinearLayout(
     dslView: LinearLayout,
     view: android.widget.LinearLayout,
+    idRegistry: IdRegistry<String>,
     children: List<BaseComponent<*, *>>
 ): Binding {
-    val bindView = bindView(dslView, view)
+    val bindView = bindView(dslView, view, idRegistry)
     view.orientation = when (dslView.orientation) {
         Horizontal -> android.widget.LinearLayout.HORIZONTAL
         Vertical -> android.widget.LinearLayout.VERTICAL
     }
     val childrenBindings = children.mapIndexed { index, childComponent ->
         @Suppress("UNCHECKED_CAST")
-        (childComponent as BaseComponent<View, android.view.View>).bind(view.getChildAt(index))
+        (childComponent as BaseComponent<View, android.view.View>).bind(view.getChildAt(index), idRegistry)
     }
     return object : Binding {
         override fun unbind() {

@@ -5,6 +5,7 @@ import android.view.ViewGroup
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.pushtorefresh.redom.android.AndroidIdRegistry
 import com.pushtorefresh.redom.android.androidDom
 import com.pushtorefresh.redom.android.recycler.Adapter
 import com.pushtorefresh.redom.android.recycler.AndroidLayoutParamsFactory
@@ -24,7 +25,7 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
         val recyclerView = RecyclerView(this)
-        val adapter = Adapter(ViewTypeRegistryImpl(), Inflater(AndroidLayoutParamsFactory(this)))
+        val adapter = Adapter(ViewTypeRegistryImpl(), AndroidIdRegistry(), Inflater(AndroidLayoutParamsFactory(this)))
         recyclerView.adapter = adapter
         recyclerView.layoutManager = LinearLayoutManager(this)
         findViewById<ViewGroup>(android.R.id.content).addView(recyclerView)

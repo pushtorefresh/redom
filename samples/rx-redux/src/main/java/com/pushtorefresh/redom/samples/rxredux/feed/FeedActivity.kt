@@ -7,6 +7,7 @@ import android.view.ViewGroup
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.pushtorefresh.redom.android.AndroidIdRegistry
 import com.pushtorefresh.redom.android.androidDom
 import com.pushtorefresh.redom.android.recycler.Adapter
 import com.pushtorefresh.redom.android.recycler.AndroidLayoutParamsFactory
@@ -27,7 +28,7 @@ class FeedActivity : AppCompatActivity() {
         setContentView(R.layout.activity_feed)
         val root = findViewById<ViewGroup>(android.R.id.content)
         val recyclerView = RecyclerView(root.context)
-        val adapter = Adapter(ViewTypeRegistryImpl(), Inflater(AndroidLayoutParamsFactory(root.context)))
+        val adapter = Adapter(ViewTypeRegistryImpl(), AndroidIdRegistry(), Inflater(AndroidLayoutParamsFactory(root.context)))
         recyclerView.adapter = adapter
         recyclerView.layoutManager = LinearLayoutManager(root.context)
         recyclerView.addOnChildAttachStateChangeListener(object : RecyclerView.OnChildAttachStateChangeListener {
@@ -45,6 +46,7 @@ class FeedActivity : AppCompatActivity() {
             ConstraintLayout {
 
                 LinearLayout {
+                    id = "ll"
                     layoutParams = ConstraintLayout.LayoutParams.create(
                         width = LayoutParams.Size.MatchParent, // TODO без этого неочевидно и работало по другому
                         height = LayoutParams.Size.WrapContent

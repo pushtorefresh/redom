@@ -4,6 +4,7 @@ import com.pushtorefresh.redom.api.BaseComponent
 import com.pushtorefresh.redom.api.Binding
 import com.pushtorefresh.redom.api.ComponentGroup
 import com.pushtorefresh.redom.api.ConstraintLayout
+import com.pushtorefresh.redom.api.IdRegistry
 import com.pushtorefresh.redom.api.View
 import com.pushtorefresh.redom.api.ViewParent
 
@@ -29,12 +30,13 @@ class ConstraintLayoutImpl(private val viewParent: ViewParent) : ConstraintLayou
 fun bindConstraintLayout(
     dslView: ConstraintLayout,
     view: androidx.constraintlayout.widget.ConstraintLayout,
+    idRegistry: IdRegistry<String>,
     children: List<BaseComponent<*, *>>
 ): Binding {
-    val bindView = bindView(dslView, view)
+    val bindView = bindView(dslView, view, idRegistry)
     val childrenBindings = children.mapIndexed { index, childComponent ->
         @Suppress("UNCHECKED_CAST")
-        (childComponent as BaseComponent<View, android.view.View>).bind(view.getChildAt(index))
+        (childComponent as BaseComponent<View, android.view.View>).bind(view.getChildAt(index), idRegistry)
     }
     return object: Binding {
         override fun unbind() {
