@@ -85,6 +85,11 @@ class FeedActivity : AppCompatActivity() {
                     layoutParams = ConstraintLayout.LayoutParams.create(
                         topToBottom = "textContainer"
                     )
+                    drawable = ImageView.Drawable.Http(
+                        url = "https://www.cbronline.com/wp-content/uploads/2016/06/what-is-URL-770x503.jpg",
+                        placeholderId = R.drawable.test,
+                        scaleType = ImageView.ScaleType.CenterCrop
+                    )
                 }
                 LinearLayout {
                     orientation = LinearLayout.Orientation.Horizontal
@@ -94,7 +99,11 @@ class FeedActivity : AppCompatActivity() {
                         topToBottom = "image"
                     )
                     Button {
-                        //                        image = TODO()
+                        background = ImageView.Drawable.Http(
+                            url = "https://www.cbronline.com/wp-content/uploads/2016/06/what-is-URL-770x503.jpg",
+                            placeholderId = R.drawable.test,
+                            scaleType = ImageView.ScaleType.FitCenter
+                        )
                     }
                     ImageView {
 

@@ -1,5 +1,6 @@
 package com.pushtorefresh.redom.android.view
 
+import com.bumptech.glide.Glide
 import com.pushtorefresh.redom.api.BaseComponent
 import com.pushtorefresh.redom.api.Binding
 import com.pushtorefresh.redom.api.Component
@@ -7,6 +8,8 @@ import com.pushtorefresh.redom.api.IdRegistry
 import com.pushtorefresh.redom.api.ImageView
 
 class ImageViewImpl : ImageView, ViewImpl() {
+    // TODO strange why nullable
+    override var drawable: ImageView.Drawable? = null
 
     override fun build(): BaseComponent<*, *> {
         return Component(
@@ -20,6 +23,12 @@ class ImageViewImpl : ImageView, ViewImpl() {
 
 fun bindImageView(dslImageView: ImageView, imageView: android.widget.ImageView, idRegistry: IdRegistry<String>): Binding {
     val binding = bindView(dslImageView, imageView, idRegistry)
+
+    dslImageView.drawable?.let { drawable ->
+        val requestManager = Glide.with(imageView)
+        requestManager.createImageRequest(drawable)
+            .into(imageView)
+    }
 
     return object : Binding {
         override fun unbind() {
