@@ -25,6 +25,7 @@ dependencies {
     implementation project(':redom:util')
     api androidXLibraries.recyclerView
     implementation androidXLibraries.appCompat
+    implementation androidXLibraries.constraintLayout
     implementation libraries.rxAndroid
     implementation libraries.rxBinding
     implementation libraries.rxReplayingShareKotlin

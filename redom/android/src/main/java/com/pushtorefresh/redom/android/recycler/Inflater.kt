@@ -9,6 +9,7 @@ import androidx.appcompat.widget.AppCompatTextView
 import androidx.appcompat.widget.SwitchCompat
 import com.pushtorefresh.redom.api.Button
 import com.pushtorefresh.redom.api.CheckBox
+import com.pushtorefresh.redom.api.ConstraintLayout
 import com.pushtorefresh.redom.api.EditText
 import com.pushtorefresh.redom.api.ImageView
 import com.pushtorefresh.redom.api.LayoutParams
@@ -36,6 +37,7 @@ class Inflater(
             }
             is ViewStructure.ViewGroup -> when (viewStructure.clazz) {
                 LinearLayout::class.java -> if (style == null) android.widget.LinearLayout(context) else android.widget.LinearLayout(context, null, style)
+                ConstraintLayout::class.java -> if (style == null) androidx.constraintlayout.widget.ConstraintLayout(context) else androidx.constraintlayout.widget.ConstraintLayout(context, null, style)
                 else -> throw IllegalArgumentException("Inflating of ${viewStructure.clazz} is not supported yet")
             }.also { viewGroup: ViewGroup ->
                 viewStructure.children.forEach { viewGroup.addView(invoke(it, parent)) }

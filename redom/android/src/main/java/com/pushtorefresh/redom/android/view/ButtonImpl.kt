@@ -4,6 +4,7 @@ import com.pushtorefresh.redom.api.BaseComponent
 import com.pushtorefresh.redom.api.Binding
 import com.pushtorefresh.redom.api.Button
 import com.pushtorefresh.redom.api.Component
+import com.pushtorefresh.redom.api.IdRegistry
 
 open class ButtonImpl : Button, TextViewImpl() {
 
@@ -16,6 +17,6 @@ open class ButtonImpl : Button, TextViewImpl() {
     }
 }
 
-fun bindButton(dslView: Button, view: android.widget.Button): Binding {
-    return bindTextView(dslView, view)
+fun bindButton(dslView: Button, view: android.widget.Button, idRegistry: IdRegistry<String>): Binding {
+    return bindTextView(dslView, view, idRegistry)
 }

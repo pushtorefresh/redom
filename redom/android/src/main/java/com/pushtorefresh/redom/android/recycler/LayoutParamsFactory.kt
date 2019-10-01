@@ -1,19 +1,24 @@
 package com.pushtorefresh.redom.android.recycler
 
+import android.annotation.SuppressLint
 import android.content.Context
 import android.util.TypedValue
 import android.view.Gravity
 import android.view.ViewGroup
 import android.widget.LinearLayout
+import androidx.constraintlayout.widget.ConstraintLayout
+import com.pushtorefresh.redom.api.IdRegistry
 import com.pushtorefresh.redom.api.LayoutParams
 
 class AndroidLayoutParamsFactory(
-    private val context: Context
+    private val context: Context,
+    private val idRegistry: IdRegistry<String>
 ) : (LayoutParams?) -> ViewGroup.LayoutParams? {
 
     override fun invoke(layoutParams: com.pushtorefresh.redom.api.LayoutParams?): ViewGroup.LayoutParams? {
         return when (layoutParams) {
             is com.pushtorefresh.redom.api.LinearLayout.LayoutParams -> createLinearLayoutLP(layoutParams)
+            is com.pushtorefresh.redom.api.ConstraintLayout.LayoutParams -> createConstraintLayoutLP(layoutParams)
             is LayoutParams -> createMarginLP(layoutParams)
             else -> null
         }
@@ -39,6 +44,7 @@ class AndroidLayoutParamsFactory(
     ): LinearLayout.LayoutParams {
         val width: Int = layoutParams.width.toAndroid()
         val height: Int = layoutParams.height.toAndroid()
+        @SuppressLint("RtlHardcoded")
         val gravity = when (layoutParams.gravity) {
             com.pushtorefresh.redom.api.LinearLayout.LayoutParams.Gravity.NO_GRAVITY -> Gravity.NO_GRAVITY
             com.pushtorefresh.redom.api.LinearLayout.LayoutParams.Gravity.TOP -> Gravity.TOP
@@ -64,6 +70,25 @@ class AndroidLayoutParamsFactory(
             this.topMargin = marginTop
             this.leftMargin = marginStart
             this.rightMargin = marginEnd
+        }
+    }
+
+    private fun createConstraintLayoutLP(
+        layoutParams: com.pushtorefresh.redom.api.ConstraintLayout.LayoutParams
+    ): androidx.constraintlayout.widget.ConstraintLayout.LayoutParams {
+        val width: Int = layoutParams.width.toAndroid()
+        val height: Int = layoutParams.height.toAndroid()
+
+        return ConstraintLayout.LayoutParams(width, height).apply {
+            this.baselineToBaseline = idRegistry.mapToInt(layoutParams.baselineToBaseline)
+            this.bottomToBottom = idRegistry.mapToInt(layoutParams.bottomToBottom)
+            this.bottomToTop = idRegistry.mapToInt(layoutParams.bottomToTop)
+            this.endToEnd = idRegistry.mapToInt(layoutParams.endToEnd)
+            this.endToStart = idRegistry.mapToInt(layoutParams.endToStart)
+            this.startToEnd = idRegistry.mapToInt(layoutParams.startToEnd)
+            this.startToStart = idRegistry.mapToInt(layoutParams.startToStart)
+            this.topToBottom = idRegistry.mapToInt(layoutParams.topToBottom)
+            this.topToTop = idRegistry.mapToInt(layoutParams.topToTop)
         }
     }
 

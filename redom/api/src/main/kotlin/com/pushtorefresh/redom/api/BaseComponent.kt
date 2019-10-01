@@ -6,22 +6,22 @@ abstract class BaseComponent<DslView : com.pushtorefresh.redom.api.View, View : 
 ) {
     abstract val viewStructure: ViewStructure
 
-    abstract fun bind(view: View): Binding
+    abstract fun bind(view: View, idRegistry: IdRegistry<String>): Binding
 }
 
 class Component<DslView : com.pushtorefresh.redom.api.View, View : Any>(
-    private val binder: (DslView, View) -> Binding,
+    private val binder: (DslView, View, IdRegistry<String>) -> Binding,
     dslView: DslView,
     clazz: Class<out DslView>
 ) : BaseComponent<DslView, View>(dslView, clazz) {
 
     override val viewStructure = ViewStructure.View(clazz, dslView.style, dslView.layoutParams)
 
-    override fun bind(view: View): Binding = binder(dslView, view)
+    override fun bind(view: View, idRegistry: IdRegistry<String>): Binding = binder(dslView, view, idRegistry)
 }
 
 class ComponentGroup<DslView : com.pushtorefresh.redom.api.ViewGroup, View : Any>(
-    private val binder: (DslView, View, List<BaseComponent<*, *>>) -> Binding,
+    private val binder: (DslView, View, IdRegistry<String>, List<BaseComponent<*, *>>) -> Binding,
     dslView: DslView,
     clazz: Class<out DslView>,
     val children: List<BaseComponent<*, *>>
@@ -34,5 +34,5 @@ class ComponentGroup<DslView : com.pushtorefresh.redom.api.ViewGroup, View : Any
         dslView.layoutParams
     )
 
-    override fun bind(view: View): Binding = binder(dslView, view, children)
+    override fun bind(view: View, idRegistry: IdRegistry<String>): Binding = binder(dslView, view, idRegistry, children)
 }

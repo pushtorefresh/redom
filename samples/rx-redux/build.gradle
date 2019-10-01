@@ -12,6 +12,7 @@ android {
 dependencies {
     implementation project(":redom:android")
     implementation androidXLibraries.appCompat
+    implementation androidXLibraries.constraintLayout
     implementation sampleLibraries.rxRedux
     implementation libraries.rxKotlin
     implementation libraries.rxReplayingShareKotlin
