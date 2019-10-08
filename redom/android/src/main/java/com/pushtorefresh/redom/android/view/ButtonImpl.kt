@@ -1,17 +1,12 @@
 package com.pushtorefresh.redom.android.view
 
 import android.graphics.drawable.Drawable
-import com.bumptech.glide.Glide
-import com.bumptech.glide.load.DataSource
-import com.bumptech.glide.load.engine.GlideException
-import com.bumptech.glide.request.RequestListener
-import com.bumptech.glide.request.target.Target
 import com.pushtorefresh.redom.api.BaseComponent
 import com.pushtorefresh.redom.api.Binding
 import com.pushtorefresh.redom.api.Button
 import com.pushtorefresh.redom.api.Component
+import com.pushtorefresh.redom.api.ComponentContext
 import com.pushtorefresh.redom.api.ImageView
-import com.pushtorefresh.redom.api.IdRegistry
 
 open class ButtonImpl : Button, TextViewImpl() {
     override var background: ImageView.Drawable? = null
@@ -24,38 +19,18 @@ open class ButtonImpl : Button, TextViewImpl() {
         )
     }
 }
-fun bindButton(dslView: Button, view: android.widget.Button, idRegistry: IdRegistry<String>): Binding {
-    val bindTextView = bindTextView(dslView, view, idRegistry)
-    val imageFuture = dslView.background?.let { drawable ->
-        Glide.with(view)
-            .createImageRequest(drawable)
-            .listener(object : RequestListener<Drawable> {
-                override fun onLoadFailed(
-                    e: GlideException?,
-                    model: Any?,
-                    target: Target<Drawable>?,
-                    isFirstResource: Boolean
-                ): Boolean {
-                    // empty
-                    return false
-                }
 
-                override fun onResourceReady(
-                    resource: Drawable,
-                    model: Any?,
-                    target: Target<Drawable>?,
-                    dataSource: DataSource?,
-                    isFirstResource: Boolean
-                ): Boolean {
-                    view.background = resource
-                    return true
-                }
-            })
-            .submit()
+fun bindButton(dslView: Button, view: android.widget.Button, componentContext: ComponentContext): Binding {
+    val bindTextView = bindTextView(dslView, view, componentContext)
+    val loader = componentContext.getImageLoader<Drawable>()
+    val imageFuture = dslView.background?.let { drawable ->
+        loader.load(drawable) { loaded ->
+            view.background = loaded
+        }
     }
     return object : Binding {
         override fun unbind() {
-            imageFuture?.cancel(true)
+            imageFuture?.close()
             bindTextView.unbind()
         }
     }

@@ -8,6 +8,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.jakewharton.rxrelay2.PublishRelay
 import com.pushtorefresh.redom.android.AndroidIdRegistry
+import com.pushtorefresh.redom.android.GlideImageLoader
 import com.pushtorefresh.redom.android.androidDom
 import com.pushtorefresh.redom.android.recycler.Adapter
 import com.pushtorefresh.redom.android.recycler.AndroidLayoutParamsFactory
@@ -37,7 +38,12 @@ class SignInAndroidView(root: ViewGroup) : SignInView {
         context = root.context
         val recyclerView = RecyclerView(root.context)
         val idRegistry = AndroidIdRegistry<String>()
-        adapter = Adapter(ViewTypeRegistryImpl(), idRegistry, Inflater(AndroidLayoutParamsFactory(root.context, idRegistry)))
+        adapter = Adapter(
+            viewTypeRegistry = ViewTypeRegistryImpl(),
+            inflater = Inflater(AndroidLayoutParamsFactory(root.context, idRegistry)),
+            idRegistry = idRegistry,
+            imageLoader = GlideImageLoader(context)
+        )
         recyclerView.adapter = adapter
         recyclerView.layoutManager = LinearLayoutManager(root.context)
         recyclerView.addOnChildAttachStateChangeListener(object : RecyclerView.OnChildAttachStateChangeListener {

@@ -1,27 +1,35 @@
 package com.pushtorefresh.redom.api
 
+class ComponentContext(
+    val registry: IdRegistry<String>,
+    private val imageLoader: ImageLoader<*>
+) {
+    @Suppress("UNCHECKED_CAST")
+    fun <T> getImageLoader(): ImageLoader<T> = imageLoader as ImageLoader<T>
+}
+
 abstract class BaseComponent<DslView : com.pushtorefresh.redom.api.View, View : Any>(
     protected val dslView: DslView,
     val clazz: Class<out DslView>
 ) {
     abstract val viewStructure: ViewStructure
 
-    abstract fun bind(view: View, idRegistry: IdRegistry<String>): Binding
+    abstract fun bind(view: View, context: ComponentContext): Binding
 }
 
 class Component<DslView : com.pushtorefresh.redom.api.View, View : Any>(
-    private val binder: (DslView, View, IdRegistry<String>) -> Binding,
+    private val binder: (DslView, View, ComponentContext) -> Binding,
     dslView: DslView,
     clazz: Class<out DslView>
 ) : BaseComponent<DslView, View>(dslView, clazz) {
 
     override val viewStructure = ViewStructure.View(clazz, dslView.style, dslView.layoutParams)
 
-    override fun bind(view: View, idRegistry: IdRegistry<String>): Binding = binder(dslView, view, idRegistry)
+    override fun bind(view: View, context: ComponentContext): Binding = binder(dslView, view, context)
 }
 
 class ComponentGroup<DslView : com.pushtorefresh.redom.api.ViewGroup, View : Any>(
-    private val binder: (DslView, View, IdRegistry<String>, List<BaseComponent<*, *>>) -> Binding,
+    private val binder: (DslView, View, ComponentContext, List<BaseComponent<*, *>>) -> Binding,
     dslView: DslView,
     clazz: Class<out DslView>,
     val children: List<BaseComponent<*, *>>
@@ -34,5 +42,7 @@ class ComponentGroup<DslView : com.pushtorefresh.redom.api.ViewGroup, View : Any
         dslView.layoutParams
     )
 
-    override fun bind(view: View, idRegistry: IdRegistry<String>): Binding = binder(dslView, view, idRegistry, children)
+    override fun bind(view: View, context: ComponentContext): Binding = binder(dslView, view, context, children)
 }
+
+
